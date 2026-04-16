@@ -1,22 +1,40 @@
-export default function Projects() {
-    const projects = [
-        { name: "Secure Notes Enterprise", tech: "Node.js, Kafka, Redis, K8s", link: "https://github.com/your-username/secure-notes" },
-        { name: "E-Commerce Cloud Backend", tech: "Go, PostgreSQL, Kafka, AWS", link: "https://github.com/your-username/ecommerce" },
-        { name: "Cybersecurity Lab", tech: "Docker, Terraform, Security Testing", link: "https://github.com/your-username/cyber-lab" },
-    ]
+import type { GetStaticProps } from "next";
 
+import { Layout } from "@/components/Layout";
+import { ProjectCard } from "@/components/ProjectCard";
+import { SectionHeader } from "@/components/SectionHeader";
+import { getProjects } from "@/lib/content";
+import type { Project } from "@/types/content";
+
+type ProjectsPageProps = {
+    projects: Project[];
+};
+
+export default function Projects({ projects }: ProjectsPageProps) {
     return (
-        <div className="min-h-screen bg-gray-100 text-gray-900 p-12">
-            <h1 className="text-3xl font-bold mb-8">Projects</h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {projects.map((proj) => (
-                    <a key={proj.name} href={proj.link} target="_blank"
-                        className="p-6 bg-white shadow-md rounded-lg hover:shadow-lg">
-                        <h2 className="text-xl font-semibold">{proj.name}</h2>
-                        <p className="text-sm text-gray-600">{proj.tech}</p>
-                    </a>
-                ))}
-            </div>
-        </div>
-    )
+        <Layout
+            title="Projects"
+            description="Case studies covering software architecture, cloud engineering, and security engineering outcomes."
+        >
+            <section className="space-y-10 pb-10">
+                <SectionHeader
+                    eyebrow="Projects"
+                    title="Architecture, cloud, and security case studies"
+                    description="Selected work covering system design, delivery decisions, security analysis, and implementation outcomes."
+                />
+
+                <div className="grid gap-6 xl:grid-cols-2">
+                    {projects.map((project) => (
+                        <ProjectCard key={project.slug} project={project} />
+                    ))}
+                </div>
+            </section>
+        </Layout>
+    );
 }
+
+export const getStaticProps: GetStaticProps<ProjectsPageProps> = async () => ({
+    props: {
+        projects: getProjects(),
+    },
+});

@@ -1,0 +1,25 @@
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1200" fill="#020617"/>
+  <g filter="url(#blur1)">
+    <circle cx="340" cy="220" r="240" fill="#0891B2" fill-opacity="0.28"/>
+    <circle cx="1180" cy="280" r="280" fill="#2563EB" fill-opacity="0.22"/>
+    <circle cx="820" cy="860" r="300" fill="#14B8A6" fill-opacity="0.18"/>
+  </g>
+  <g opacity="0.35">
+    <path d="M120 240C290 170 460 170 630 240C800 310 970 310 1140 240C1270 190 1380 180 1480 210" stroke="#67E8F9" stroke-width="2"/>
+    <path d="M80 420C260 350 440 350 620 420C800 490 980 490 1160 420C1290 370 1400 360 1520 390" stroke="#60A5FA" stroke-width="2"/>
+    <path d="M60 620C270 550 480 550 690 620C900 690 1110 690 1320 620C1400 592 1470 585 1540 600" stroke="#2DD4BF" stroke-width="2"/>
+    <path d="M140 840C320 780 500 780 680 840C860 900 1040 900 1220 840C1320 806 1420 798 1500 816" stroke="#A78BFA" stroke-width="2"/>
+  </g>
+  <g opacity="0.12">
+    <rect x="160" y="170" width="1280" height="860" rx="36" stroke="white"/>
+    <rect x="210" y="220" width="1180" height="760" rx="28" stroke="white"/>
+  </g>
+  <defs>
+    <filter id="blur1" x="-100" y="-220" width="1680" height="1520" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="100" result="effect1_foregroundBlur_1_1"/>
+    </filter>
+  </defs>
+</svg>

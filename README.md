@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio website
 
-## Getting Started
+A modern portfolio for software architecture, cloud engineering, and security engineering roles.
 
-First, run the development server:
+## What changed
+
+- Modern landing page with stronger positioning for HR and hiring managers.
+- Markdown-driven projects and blog posts.
+- Project detail pages that support architecture diagrams and threat model images.
+- Reusable templates so new content can be added without editing the page components.
+
+## Content workflow
+
+The easiest way to maintain this portfolio is through markdown files.
+
+### Add a new project
+
+1. Copy [content/templates/project-template.md](content/templates/project-template.md).
+2. Save it into [content/projects](content/projects).
+3. Update the frontmatter fields.
+4. Add your architecture and threat model images to [public/diagrams](public/diagrams).
+5. Reference those images in `architectureImage` and `threatModelImage`.
+
+### Add a new blog post
+
+1. Copy [content/templates/blog-template.md](content/templates/blog-template.md).
+2. Save it into [content/blog](content/blog).
+3. Update the title, summary, tags, and markdown body.
+
+## Recommended content format
+
+For each project, include:
+
+- The business or engineering context
+- The architecture decisions and trade-offs
+- A simple architecture diagram
+- A short security analysis or threat model
+- Measurable outcomes
+
+This combination works well because it shows both technical depth and communication quality.
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Then open <http://localhost:3000>.

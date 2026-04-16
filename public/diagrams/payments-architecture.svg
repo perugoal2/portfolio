@@ -1,0 +1,30 @@
+<svg width="1400" height="860" viewBox="0 0 1400 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="860" rx="36" fill="#020617"/>
+  <text x="70" y="90" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="34" font-weight="700">Zero Trust Payments Platform</text>
+  <text x="70" y="128" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">Global edge, identity-aware services, event-driven settlement, and observability control plane.</text>
+  <rect x="70" y="180" width="220" height="120" rx="24" fill="#082F49" stroke="#22D3EE"/>
+  <text x="115" y="250" fill="#CFFAFE" font-family="Arial, sans-serif" font-size="28">Web / API</text>
+  <rect x="360" y="180" width="250" height="120" rx="24" fill="#0F766E" stroke="#2DD4BF"/>
+  <text x="422" y="236" fill="#CCFBF1" font-family="Arial, sans-serif" font-size="28">Auth +</text>
+  <text x="402" y="270" fill="#CCFBF1" font-family="Arial, sans-serif" font-size="28">Policy Gate</text>
+  <rect x="680" y="180" width="260" height="120" rx="24" fill="#172554" stroke="#60A5FA"/>
+  <text x="738" y="236" fill="#DBEAFE" font-family="Arial, sans-serif" font-size="28">Payment</text>
+  <text x="736" y="270" fill="#DBEAFE" font-family="Arial, sans-serif" font-size="28">Services</text>
+  <rect x="1010" y="180" width="300" height="120" rx="24" fill="#3F0D12" stroke="#FB7185"/>
+  <text x="1080" y="250" fill="#FFE4E6" font-family="Arial, sans-serif" font-size="28">Settlement Queue</text>
+  <rect x="220" y="420" width="280" height="120" rx="24" fill="#0F172A" stroke="#38BDF8"/>
+  <text x="290" y="490" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="28">Fraud Screening</text>
+  <rect x="560" y="420" width="280" height="120" rx="24" fill="#0F172A" stroke="#38BDF8"/>
+  <text x="655" y="490" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="28">Event Bus</text>
+  <rect x="900" y="420" width="280" height="120" rx="24" fill="#0F172A" stroke="#38BDF8"/>
+  <text x="956" y="490" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="28">Audit + Ledger</text>
+  <rect x="1040" y="640" width="250" height="110" rx="24" fill="#1E293B" stroke="#A78BFA"/>
+  <text x="1086" y="705" fill="#E9D5FF" font-family="Arial, sans-serif" font-size="26">Observability</text>
+  <path d="M290 240H360" stroke="#22D3EE" stroke-width="8" stroke-linecap="round"/>
+  <path d="M610 240H680" stroke="#22D3EE" stroke-width="8" stroke-linecap="round"/>
+  <path d="M940 240H1010" stroke="#22D3EE" stroke-width="8" stroke-linecap="round"/>
+  <path d="M810 300V420" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M500 480H560" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M840 480H900" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1180 540V640" stroke="#A78BFA" stroke-width="8" stroke-linecap="round"/>
+</svg>

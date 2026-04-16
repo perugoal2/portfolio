@@ -1,0 +1,14 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="700" rx="36" fill="#020617"/>
+  <rect x="60" y="60" width="1080" height="580" rx="28" fill="#0F172A" stroke="#334155"/>
+  <text x="100" y="135" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="40" font-weight="700">Replace with your architecture diagram</text>
+  <text x="100" y="185" fill="#94A3B8" font-family="Arial, sans-serif" font-size="22">Store SVG or PNG files in public/diagrams and reference them in project markdown.</text>
+  <rect x="100" y="250" width="300" height="120" rx="24" fill="#082F49" stroke="#22D3EE"/>
+  <text x="150" y="320" fill="#CFFAFE" font-family="Arial, sans-serif" font-size="28">Edge / Clients</text>
+  <rect x="450" y="250" width="300" height="120" rx="24" fill="#0F766E" stroke="#2DD4BF"/>
+  <text x="520" y="320" fill="#CCFBF1" font-family="Arial, sans-serif" font-size="28">Core Services</text>
+  <rect x="800" y="250" width="300" height="120" rx="24" fill="#172554" stroke="#60A5FA"/>
+  <text x="875" y="320" fill="#DBEAFE" font-family="Arial, sans-serif" font-size="28">Data / Events</text>
+  <path d="M400 310H450" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M750 310H800" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/>
+</svg>

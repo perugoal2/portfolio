@@ -1,0 +1,14 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="700" rx="36" fill="#020617"/>
+  <rect x="60" y="60" width="1080" height="580" rx="28" fill="#0F172A" stroke="#334155"/>
+  <text x="100" y="135" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="40" font-weight="700">Replace with your threat model</text>
+  <text x="100" y="185" fill="#94A3B8" font-family="Arial, sans-serif" font-size="22">Show trust boundaries, attack paths, sensitive assets, and controls.</text>
+  <rect x="120" y="260" width="250" height="120" rx="24" fill="#3F0D12" stroke="#FB7185"/>
+  <text x="188" y="327" fill="#FFE4E6" font-family="Arial, sans-serif" font-size="28">Threats</text>
+  <rect x="475" y="260" width="250" height="120" rx="24" fill="#451A03" stroke="#FBBF24"/>
+  <text x="542" y="327" fill="#FEF3C7" font-family="Arial, sans-serif" font-size="28">Boundaries</text>
+  <rect x="830" y="260" width="250" height="120" rx="24" fill="#052E16" stroke="#4ADE80"/>
+  <text x="905" y="327" fill="#DCFCE7" font-family="Arial, sans-serif" font-size="28">Controls</text>
+  <path d="M370 320H475" stroke="#F59E0B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M725 320H830" stroke="#F59E0B" stroke-width="8" stroke-linecap="round"/>
+</svg>
