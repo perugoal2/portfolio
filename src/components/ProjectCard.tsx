@@ -10,8 +10,8 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <article className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl shadow-cyan-950/10 transition hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.07]">
-      <div className="relative h-52 overflow-hidden border-b border-white/10 bg-slate-900/60">
+    <article className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition hover:border-cyan-300/30 hover:bg-white/[0.05]">
+      <div className="relative h-48 overflow-hidden border-b border-white/10 bg-slate-900/60">
         <Image
           src={project.architectureImage}
           alt={`${project.title} architecture diagram`}
@@ -20,15 +20,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
         />
       </div>
 
-      <div className="space-y-5 p-6">
-        <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.25em] text-slate-400">
+      <div className="space-y-4 p-5">
+        <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-slate-400">
           <span>{project.date}</span>
         </div>
 
         <div>
-          <h3 className="text-2xl font-semibold text-white">{project.title}</h3>
+          <h3 className="text-xl font-semibold text-white">{project.title}</h3>
           <p className="mt-2 text-sm text-cyan-200">{project.tagline}</p>
-          <p className="mt-4 text-sm leading-7 text-slate-300">{project.summary}</p>
+          <p className="mt-3 text-sm leading-7 text-slate-300">{project.summary}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -37,7 +37,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           ))}
         </div>
 
-        <div className="grid gap-2 text-sm text-slate-300">
+        <div className="grid gap-2 text-sm leading-6 text-slate-300">
           {project.outcomes.slice(0, 3).map((outcome) => (
             <p key={outcome}>• {outcome}</p>
           ))}

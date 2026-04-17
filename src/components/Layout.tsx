@@ -52,16 +52,16 @@ export function Layout({ title, description, children }: LayoutProps) {
       </Head>
 
       <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_30%),radial-gradient(circle_at_80%_20%,_rgba(96,165,250,0.18),_transparent_25%),radial-gradient(circle_at_bottom,_rgba(14,165,233,0.14),_transparent_35%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),_transparent_34%),radial-gradient(circle_at_80%_20%,_rgba(96,165,250,0.1),_transparent_28%),radial-gradient(circle_at_bottom,_rgba(14,165,233,0.09),_transparent_40%)]" />
 
-        <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col px-6 py-6 sm:px-10 lg:px-12">
-          <header className="sticky top-4 z-20 mb-10 rounded-full border border-white/10 bg-slate-900/75 px-4 py-3 backdrop-blur xl:px-6">
+        <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-6 sm:px-8 lg:px-10">
+          <header className="sticky top-4 z-20 mb-12 rounded-full border border-white/10 bg-slate-900/65 px-4 py-3 backdrop-blur xl:px-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <Link href="/" className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-300">
+              <Link href="/" className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">
                 Peru N
               </Link>
 
-              <nav className="flex flex-wrap items-center gap-2 text-sm text-slate-300">
+              <nav className="flex flex-wrap items-center gap-1.5 text-sm text-slate-300">
                 {navigation.map((item) => {
                   const isHome = item.href === "/";
                   const isActive = isHome
