@@ -54,7 +54,7 @@ a {
 .prose-panel h1,
 .prose-panel h2,
 .prose-panel h3 {
-  color: #f8fafc;
+  color: #f8fafc !important;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;

@@ -42,7 +42,7 @@ export const renderMarkdownToHtml = (markdown: string) => {
       closeList();
       const level = headingMatch[1].length;
       const text = renderInlineMarkdown(headingMatch[2]);
-      html.push(`<h${level}>${text}</h${level}>`);
+      html.push(`<h${level} style="color:#f8fafc;">${text}</h${level}>`);
       return;
     }
 
