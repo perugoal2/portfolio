@@ -1,0 +1,24 @@
+<svg width="1400" height="860" viewBox="0 0 1400 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="860" rx="36" fill="#020617"/>
+  <text x="70" y="90" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="34" font-weight="700">AI PDF Reader Threat Model</text>
+  <text x="70" y="128" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">Threats across untrusted PDFs, local storage, prompt boundaries, local models, and desktop distribution.</text>
+  <rect x="90" y="220" width="290" height="130" rx="24" fill="#3F0D12" stroke="#FB7185"/>
+  <text x="132" y="280" fill="#FFE4E6" font-family="Arial, sans-serif" font-size="28">Untrusted PDF Input</text>
+  <text x="138" y="314" fill="#FFE4E6" font-family="Arial, sans-serif" font-size="22">malformed files / data risk</text>
+  <rect x="490" y="180" width="420" height="500" rx="32" fill="#0F172A" stroke="#FBBF24" stroke-dasharray="16 10"/>
+  <text x="594" y="235" fill="#FEF3C7" font-family="Arial, sans-serif" font-size="28">Local Trust Boundary</text>
+  <rect x="575" y="310" width="250" height="110" rx="24" fill="#172554" stroke="#60A5FA"/>
+  <text x="634" y="378" fill="#DBEAFE" font-family="Arial, sans-serif" font-size="28">Stored Indexes</text>
+  <rect x="575" y="470" width="250" height="110" rx="24" fill="#172554" stroke="#60A5FA"/>
+  <text x="631" y="538" fill="#DBEAFE" font-family="Arial, sans-serif" font-size="28">Prompt Context</text>
+  <rect x="980" y="220" width="300" height="130" rx="24" fill="#451A03" stroke="#F59E0B"/>
+  <text x="1032" y="280" fill="#FEF3C7" font-family="Arial, sans-serif" font-size="28">Model / Package Risk</text>
+  <text x="1048" y="314" fill="#FEF3C7" font-family="Arial, sans-serif" font-size="22">bundled assets / updates</text>
+  <rect x="980" y="520" width="300" height="140" rx="24" fill="#052E16" stroke="#4ADE80"/>
+  <text x="1085" y="580" fill="#DCFCE7" font-family="Arial, sans-serif" font-size="28">Controls</text>
+  <text x="1018" y="620" fill="#DCFCE7" font-family="Arial, sans-serif" font-size="22">local-first execution, isolated</text>
+  <text x="1030" y="650" fill="#DCFCE7" font-family="Arial, sans-serif" font-size="22">preload, policy, clear storage paths</text>
+  <path d="M380 285H490" stroke="#FB7185" stroke-width="8" stroke-linecap="round"/>
+  <path d="M910 285H980" stroke="#F59E0B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M825 590H980" stroke="#4ADE80" stroke-width="8" stroke-linecap="round"/>
+</svg>
