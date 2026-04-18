@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 
+import { withBasePath } from "@/lib/site";
 import type { BlogFrontmatter, BlogPost, Project, ProjectFrontmatter } from "@/types/content";
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
@@ -115,8 +116,8 @@ const normalizeProject = (item: RawFrontmatter & { content: string }): Project =
   tags: toStringArray(item.tags),
   outcomes: toStringArray(item.outcomes),
   capabilities: toStringArray(item.capabilities),
-  architectureImage: String(item.architectureImage ?? "/diagrams/default-architecture.svg"),
-  threatModelImage: String(item.threatModelImage ?? "/diagrams/default-threat-model.svg"),
+  architectureImage: withBasePath(String(item.architectureImage ?? "/diagrams/default-architecture.svg")),
+  threatModelImage: withBasePath(String(item.threatModelImage ?? "/diagrams/default-threat-model.svg")),
   githubUrl: item.githubUrl ? String(item.githubUrl) : null,
   liveUrl: item.liveUrl ? String(item.liveUrl) : null,
   content: item.content,

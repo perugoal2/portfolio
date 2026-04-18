@@ -8,7 +8,7 @@ import { Pill } from "@/components/Pill";
 import { ProjectCard } from "@/components/ProjectCard";
 import { SectionHeader } from "@/components/SectionHeader";
 import { getFeaturedBlogPosts, getFeaturedProjects } from "@/lib/content";
-import { homeHighlights, siteProfile } from "@/lib/site";
+import { homeHighlights, siteProfile, withBasePath } from "@/lib/site";
 import type { BlogPost, Project } from "@/types/content";
 
 const positioning = [
@@ -46,7 +46,7 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
         >
             <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] py-12 sm:py-14">
                 <div className="pointer-events-none absolute inset-0 opacity-35">
-                    <Image src="/visuals/hero-mesh.svg" alt="" fill priority className="object-cover" />
+                    <Image src={withBasePath("/visuals/hero-mesh.svg")} alt="" fill priority className="object-cover" />
                 </div>
                 <div className="relative grid gap-10 px-6 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:px-10 lg:items-center">
                     <div>
@@ -94,7 +94,7 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
 
                     <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-900/55 p-4">
                         <div className="relative h-[360px] overflow-hidden rounded-2xl border border-white/10 bg-slate-900/80">
-                            <Image src="/diagrams/ai-pdf-reader-architecture.svg" alt="AI PDF Reader architecture" fill className="object-cover p-4" />
+                            <Image src={withBasePath("/diagrams/ai-pdf-reader-architecture.svg")} alt="AI PDF Reader architecture" fill className="object-cover p-4" />
                             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-5">
                                 <p className="text-sm font-medium text-white">Recent architecture work</p>
                                 <p className="mt-2 text-sm leading-6 text-slate-300">

@@ -1,3 +1,29 @@
+const normalizedBasePath = (process.env.BASE_PATH ?? "").replace(/\/$/, "");
+
+export const withBasePath = (url: string): string => {
+  if (!url) {
+    return url;
+  }
+
+  if (/^(?:[a-z]+:)?\/\//i.test(url) || url.startsWith("data:") || url.startsWith("mailto:") || url.startsWith("tel:") || url.startsWith("#")) {
+    return url;
+  }
+
+  if (!url.startsWith("/")) {
+    return url;
+  }
+
+  if (!normalizedBasePath) {
+    return url;
+  }
+
+  if (url === normalizedBasePath || url.startsWith(`${normalizedBasePath}/`)) {
+    return url;
+  }
+
+  return `${normalizedBasePath}${url}`;
+};
+
 export const siteProfile = {
   name: "Peru N",
   headline: "Software Architect · Cloud Engineer · Security Engineer",
