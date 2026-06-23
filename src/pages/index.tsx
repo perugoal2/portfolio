@@ -35,7 +35,7 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
         },
         {
             label: "Primary repo",
-            value: "AI PDF Reader",
+            value: "Agentic IaC Reviewer",
         },
     ];
 
@@ -182,7 +182,7 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
                         rel="noreferrer"
                         className="rounded-full bg-cyan-400 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
                     >
-                        AI PDF Reader
+                        Featured repo
                     </a>
                     <Link
                         href="/projects"

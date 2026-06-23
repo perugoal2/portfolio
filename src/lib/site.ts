@@ -30,7 +30,7 @@ export const siteProfile = {
   summary:
     "I design secure, scalable software systems and turn complex cloud or AI workflows into products that feel clear, usable, and trustworthy.",
   githubUrl: "https://github.com/perugoal2",
-  featuredRepoUrl: "https://github.com/perugoal2/AI-PDF-Reader",
+  featuredRepoUrl: "https://github.com/perugoal2/Agentic-Kubernetes-IaC-Security-Reviewer",
   linkedinUrl: "https://www.linkedin.com/in/peru-n-placeholder/",
   email: "peru.n.placeholder@example.com",
   emailUrl: "mailto:peru.n.placeholder@example.com",
