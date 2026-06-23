@@ -4,202 +4,222 @@ import Link from "next/link";
 
 import { BlogCard } from "@/components/BlogCard";
 import { Layout } from "@/components/Layout";
-import { Pill } from "@/components/Pill";
 import { ProjectCard } from "@/components/ProjectCard";
 import { SectionHeader } from "@/components/SectionHeader";
 import { getFeaturedBlogPosts, getFeaturedProjects } from "@/lib/content";
-import { homeHighlights, siteProfile, withBasePath } from "@/lib/site";
+import { domains, homeHighlights, siteProfile, withBasePath } from "@/lib/site";
 import type { BlogPost, Project } from "@/types/content";
 
-const positioning = [
-    "Software Architect",
-    "Cloud Engineer",
-    "Security Engineer",
-    "Technical Leadership",
-];
-
 type HomePageProps = {
-    featuredProjects: Project[];
-    featuredPosts: BlogPost[];
+  featuredProjects: Project[];
+  featuredPosts: BlogPost[];
 };
 
 export default function Home({ featuredProjects, featuredPosts }: HomePageProps) {
-    const valueSignals = [
-        {
-            label: "Featured projects",
-            value: String(featuredProjects.length),
-        },
-        {
-            label: "Deep-dive blogs",
-            value: String(featuredPosts.length),
-        },
-        {
-            label: "Primary repo",
-            value: "AI PDF Reader",
-        },
-    ];
+  // A compact at-a-glance record strip for the hero.
+  const titleBlock = [
+    { k: "Name", v: "Peru N" },
+    { k: "Focus", v: "Architecture · Cloud · Security" },
+    { k: "Contact", v: "Email", href: siteProfile.emailUrl },
+    { k: "Featured repo", v: "Agentic IaC Reviewer", href: siteProfile.featuredRepoUrl },
+  ];
 
-    return (
-        <Layout
-            title="Architecture, Cloud, and Security"
-            description="Software architecture, cloud engineering, and security engineering work."
-        >
-            <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] py-12 sm:py-14">
-                <div className="pointer-events-none absolute inset-0 opacity-35">
-                    <Image src={withBasePath("/visuals/hero-mesh.svg")} alt="" fill priority className="object-cover" />
+  return (
+    <Layout
+      title="Architecture, Cloud & Security"
+      description="Software architecture, cloud engineering, and security engineering work."
+    >
+      {/* ------------------------------------------------------ HERO / SHEET 00 */}
+      <section className="relative">
+        <div className="ticks border border-line-strong bg-ink/30">
+          {/* title bar */}
+          <div className="reveal flex items-center gap-3 border-b border-line px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-bone-faint sm:px-7 sm:text-[0.66rem] sm:tracking-[0.22em]" style={{ animationDelay: "0ms" }}>
+            <span className="whitespace-nowrap text-bone">Peru N</span>
+            <span className="hidden text-line-strong sm:inline">/</span>
+            <span className="hidden sm:inline">Portfolio</span>
+            <span className="rule-draw mx-1 h-px flex-1 bg-line" style={{ animationDelay: "160ms" }} />
+            <span className="whitespace-nowrap"><span className="text-signal">Case studies</span> &amp; notes</span>
+            <span className="hidden text-line-strong sm:inline">/</span>
+            <span className="hidden whitespace-nowrap sm:inline">{new Date().getFullYear()}</span>
+          </div>
+
+          {/* sheet body */}
+          <div className="grid gap-8 p-6 sm:p-7 lg:grid-cols-12 lg:items-center lg:gap-10 lg:p-8">
+            <div className="lg:col-span-7">
+              <h1
+                className="headline reveal-wipe text-balance text-[clamp(1.9rem,3.6vw,3.25rem)] leading-[1.05]"
+                style={{ animationDelay: "70ms" }}
+              >
+                I design cloud &amp; AI systems built for{" "}
+                <span className="italic text-signal">security</span>, clarity, and
+                real-world use.
+              </h1>
+
+              <p
+                className="reveal mt-5 max-w-[52ch] text-pretty text-[1rem] leading-7 text-bone-dim"
+                style={{ animationDelay: "150ms" }}
+              >
+                {siteProfile.summary}
+              </p>
+
+              <div className="reveal mt-7 flex flex-wrap items-center gap-4" style={{ animationDelay: "230ms" }}>
+                <Link href="/projects" className="btn-signal inline-flex items-center gap-2 px-5 py-3">
+                  Explore case studies <span aria-hidden="true">→</span>
+                </Link>
+                <Link href="/blog" className="btn-ghost inline-flex items-center px-5 py-3">
+                  Read the notes
+                </Link>
+              </div>
+            </div>
+
+            {/* architecture detail — carries real information beside the statement */}
+            <div className="reveal lg:col-span-5" style={{ animationDelay: "320ms" }}>
+              <figure className="ticks border border-line bg-panel/40 p-2.5">
+                <div className="relative aspect-[16/10] overflow-hidden border border-line bg-ink-2">
+                  <Image
+                    src={withBasePath("/diagrams/ai-pdf-reader-architecture.svg")}
+                    alt="Recent architecture work: AI PDF reader system diagram"
+                    fill
+                    priority
+                    className="object-contain p-2.5"
+                  />
                 </div>
-                <div className="relative grid gap-10 px-6 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:px-10 lg:items-center">
-                    <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">Architecture · Cloud · Security</p>
-                        <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                            I design cloud and AI systems with security, clarity, and real-world use in mind.
-                        </h1>
-                        <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300">
-                            {siteProfile.name} · {siteProfile.headline}
-                        </p>
-                        <p className="mt-2 max-w-3xl text-base leading-8 text-slate-300">
-                            {siteProfile.summary}
-                        </p>
+                <figcaption className="mt-2.5 flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.16em] text-bone-faint">
+                  <span><span className="text-signal">AI PDF Reader</span> — Architecture</span>
+                  <span className="hidden sm:inline">Trust boundaries</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
 
-                        <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                            {valueSignals.map((signal) => (
-                                <div key={signal.label} className="rounded-2xl border border-white/10 bg-slate-900/45 p-4">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">{signal.label}</p>
-                                    <p className="mt-2 text-lg font-semibold text-white">{signal.value}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="mt-7 flex flex-wrap gap-2">
-                            {positioning.map((item) => (
-                                <Pill key={item}>{item}</Pill>
-                            ))}
-                        </div>
-
-                        <div className="mt-8 flex flex-wrap gap-3">
-                            <Link
-                                href="/projects"
-                                className="rounded-full bg-cyan-400 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
-                            >
-                                Explore case studies
-                            </Link>
-                            <Link
-                                href="/blog"
-                                className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/30 hover:bg-white/5"
-                            >
-                                Read blog
-                            </Link>
-                        </div>
-                    </div>
-
-                    <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-900/55 p-4">
-                        <div className="relative h-[360px] overflow-hidden rounded-2xl border border-white/10 bg-slate-900/80">
-                            <Image src={withBasePath("/diagrams/ai-pdf-reader-architecture.svg")} alt="AI PDF Reader architecture" fill className="object-cover p-4" />
-                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-5">
-                                <p className="text-sm font-medium text-white">Recent architecture work</p>
-                                <p className="mt-2 text-sm leading-6 text-slate-300">
-                                    Product architecture, trust boundaries, and delivery decisions across recent projects.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+          {/* title block — the sheet's record strip, filling in cell by cell */}
+          <div className="grid grid-cols-2 gap-px border-t border-line bg-line md:grid-cols-4">
+            {titleBlock.map((cell, i) => {
+              const delay = { animationDelay: `${380 + i * 70}ms` };
+              const inner = (
+                <>
+                  <p className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-bone-faint">{cell.k}</p>
+                  <p className="mt-2 flex items-center gap-1.5 font-mono text-[0.78rem] uppercase tracking-[0.06em] text-bone">
+                    {cell.v}
+                    {cell.href ? <span aria-hidden="true" className="text-signal transition-transform group-hover:translate-x-0.5">↗</span> : null}
+                  </p>
+                </>
+              );
+              return cell.href ? (
+                <a
+                  key={cell.k}
+                  href={cell.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="reveal group bg-ink p-5 transition-colors hover:bg-panel/60"
+                  style={delay}
+                >
+                  {inner}
+                </a>
+              ) : (
+                <div key={cell.k} className="reveal bg-ink p-5" style={delay}>
+                  {inner}
                 </div>
-            </section>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-            <section className="pb-12 pt-10">
-                <div className="grid gap-6 xl:grid-cols-3">
-                    {homeHighlights.map((item) => (
-                        <article key={item.value} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">{item.value}</p>
-                            <h2 className="mt-3 text-lg font-semibold text-white">{item.label}</h2>
-                            <p className="mt-2 text-sm leading-7 text-slate-300">{item.detail}</p>
-                        </article>
-                    ))}
+      {/* ------------------------------------------------------- CAPABILITY */}
+      <section className="mt-28 grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <p className="tag tag--signal"><span className="marker">§</span> What I do</p>
+          <h2 className="headline mt-4 text-3xl sm:text-[2.4rem]">Three practices, one systems mindset</h2>
+          <p className="mt-4 max-w-sm text-[0.95rem] leading-7 text-bone-dim">
+            I work end-to-end — from target architecture to delivery to the threat
+            model that keeps it standing.
+          </p>
+        </div>
+
+        <dl data-stagger className="border-t border-line">
+          {homeHighlights.map((item) => {
+            const d = domains[item.domain];
+            return (
+              <div
+                key={item.label}
+                className="group grid grid-cols-[3.5rem_1fr] gap-x-5 border-b border-line py-6 transition-colors hover:bg-panel/30 sm:grid-cols-[5rem_1fr] sm:gap-x-8 sm:py-7"
+              >
+                <dt className={`flex items-center gap-2 pt-1.5 font-mono text-xs uppercase tracking-[0.18em] ${d.text}`}>
+                  <span className={`h-2 w-2 ${d.dot}`} aria-hidden="true" />
+                  {item.value}
+                </dt>
+                <div>
+                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <h3 className="font-display text-xl text-bone sm:text-2xl">{item.label}</h3>
+                    <span className={`font-mono text-[0.62rem] uppercase tracking-[0.18em] ${d.text}`}>
+                      {d.label}
+                    </span>
+                  </div>
+                  <dd className="mt-2 text-sm leading-7 text-bone-dim">{item.detail}</dd>
                 </div>
-            </section>
+              </div>
+            );
+          })}
+        </dl>
+      </section>
 
-            <section className="space-y-8 pb-12">
-                <SectionHeader
-                    eyebrow="Featured case studies"
-                    title="Projects that show systems thinking, cloud execution, and secure design"
-                    description="Selected projects with architecture visuals, security analysis, and implementation outcomes."
-                />
+      {/* --------------------------------------------------------- PROJECTS */}
+      <section className="mt-28">
+        <SectionHeader
+          eyebrow="Featured work"
+          title="Case studies in systems thinking & secure design"
+          description="Projects with architecture visuals, security analysis, and implementation outcomes — not just screenshots."
+        />
 
-                <div className="grid gap-6 xl:grid-cols-2">
-                    {featuredProjects.map((project) => (
-                        <ProjectCard key={project.slug} project={project} />
-                    ))}
-                </div>
-            </section>
+        <div data-stagger className="mt-10 grid gap-6 xl:grid-cols-2">
+          {featuredProjects.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} index={i + 1} />
+          ))}
+        </div>
+      </section>
 
-            <section className="space-y-8 pb-12">
-                <SectionHeader
-                    eyebrow="Notes"
-                    title="Writing on architecture, delivery, and security"
-                    description="Short pieces on platform design, technical decisions, and implementation patterns from recent work."
-                />
+      {/* ------------------------------------------------------------ NOTES */}
+      <section className="mt-28">
+        <SectionHeader
+          eyebrow="Blog"
+          title="Writing on architecture, delivery & security"
+          description="Short pieces on platform design, technical decisions, and implementation patterns from recent work."
+        />
 
-                <div className="grid gap-6 lg:grid-cols-2">
-                    {featuredPosts.map((post) => (
-                        <BlogCard key={post.slug} post={post} />
-                    ))}
-                </div>
-            </section>
+        <div data-stagger className="mt-10 grid gap-6 lg:grid-cols-2">
+          {featuredPosts.map((post) => (
+            <BlogCard key={post.slug} post={post} />
+          ))}
+        </div>
+      </section>
 
-            <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-7">
-                <SectionHeader
-                    eyebrow="Elsewhere"
-                    title="Links"
-                    description="GitHub, LinkedIn, email, and project links."
-                />
+      {/* ------------------------------------------------------------ CONTACT */}
+      <section className="mt-28 border border-line bg-panel/30 p-8 sm:p-12">
+        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-lg">
+            <p className="tag tag--signal"><span className="marker">§</span> Get in touch</p>
+            <h2 className="headline mt-4 text-3xl sm:text-4xl">Let&apos;s build something solid together.</h2>
+            <p className="mt-4 text-sm leading-7 text-bone-dim">
+              Open to architecture, cloud, and security engineering conversations. The links below are the fastest way through.
+            </p>
+          </div>
 
-                <div className="mt-7 flex flex-wrap gap-3">
-                    <a
-                        href={siteProfile.githubUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/30 hover:bg-white/5"
-                    >
-                        GitHub
-                    </a>
-                    <a
-                        href={siteProfile.emailUrl}
-                        className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/30 hover:bg-white/5"
-                    >
-                        Email
-                    </a>
-                    <a
-                        href={siteProfile.linkedinUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/30 hover:bg-white/5"
-                    >
-                        LinkedIn
-                    </a>
-                    <a
-                        href={siteProfile.featuredRepoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-full bg-cyan-400 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
-                    >
-                        AI PDF Reader
-                    </a>
-                    <Link
-                        href="/projects"
-                        className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/30 hover:bg-white/5"
-                    >
-                        Browse all projects
-                    </Link>
-                </div>
-
-            </section>
-        </Layout>
-    );
+          <div className="flex flex-wrap gap-3">
+            <a href={siteProfile.githubUrl} target="_blank" rel="noreferrer" className="btn-ghost px-5 py-3">GitHub</a>
+            <a href={siteProfile.linkedinUrl} target="_blank" rel="noreferrer" className="btn-ghost px-5 py-3">LinkedIn</a>
+            <a href={siteProfile.emailUrl} className="btn-ghost px-5 py-3">Email</a>
+            <a href={siteProfile.featuredRepoUrl} target="_blank" rel="noreferrer" className="btn-signal px-5 py-3">Featured repo</a>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
 }
 
 export const getStaticProps: GetStaticProps<HomePageProps> = async () => ({
-    props: {
-        featuredProjects: getFeaturedProjects(),
-        featuredPosts: getFeaturedBlogPosts(),
-    },
+  props: {
+    featuredProjects: getFeaturedProjects(),
+    featuredPosts: getFeaturedBlogPosts(),
+  },
 });

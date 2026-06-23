@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# impeccable tooling (local skill install + runtime state)
+/.claude/
+/.github/hooks/
+/.impeccable/config.local.json
+/.impeccable/live/sessions/
