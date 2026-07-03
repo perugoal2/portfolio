@@ -13,12 +13,12 @@ type ProjectsPageProps = {
 export default function Projects({ projects }: ProjectsPageProps) {
   return (
     <Layout
-      title="Work"
+      title="Projects"
       description="Case studies covering software architecture, cloud engineering, and security engineering outcomes."
     >
       <section className="pb-4">
         <SectionHeader
-          eyebrow="Work / Index"
+          eyebrow="Projects"
           title="Architecture, cloud & security case studies"
           description="Selected work covering system design, delivery decisions, security analysis, and implementation outcomes."
         />

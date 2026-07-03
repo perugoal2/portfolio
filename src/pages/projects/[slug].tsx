@@ -13,13 +13,11 @@ type ProjectPageProps = {
 };
 
 function DiagramPlate({
-  plate,
   title,
   caption,
   src,
   alt,
 }: {
-  plate: string;
   title: string;
   caption: string;
   src: string;
@@ -27,11 +25,8 @@ function DiagramPlate({
 }) {
   return (
     <figure className="ticks border border-line bg-panel/40">
-      <figcaption className="flex items-center justify-between border-b border-line px-5 py-4">
-        <div>
-          <p className="tag tag--signal">{plate}</p>
-          <h2 className="mt-1 font-display text-lg text-bone">{title}</h2>
-        </div>
+      <figcaption className="border-b border-line px-5 py-4">
+        <h2 className="font-display text-lg text-bone">{title}</h2>
       </figcaption>
       <div className="relative h-[320px] bg-ink-2">
         <Image src={src} alt={alt} fill className="object-contain p-4" />
@@ -49,7 +44,7 @@ export default function ProjectPage({ project }: ProjectPageProps) {
           href="/projects"
           className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-bone-dim transition hover:text-signal"
         >
-          <span aria-hidden="true">←</span> Back to work
+          <span aria-hidden="true">←</span> Back to projects
         </Link>
 
         {/* header */}
@@ -122,14 +117,12 @@ export default function ProjectPage({ project }: ProjectPageProps) {
         {/* plates */}
         <div className="grid gap-6 lg:grid-cols-2">
           <DiagramPlate
-            plate="Plate 01"
             title="Architecture diagram"
             caption="System boundaries, data flow, and core platform components."
             src={project.architectureImage}
             alt={`${project.title} architecture diagram`}
           />
           <DiagramPlate
-            plate="Plate 02"
             title="Threat model"
             caption="Trust boundaries, risk areas, and design decisions for safer operation."
             src={project.threatModelImage}

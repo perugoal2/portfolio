@@ -28,7 +28,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           </span>
         ) : null}
         <span className="absolute bottom-3 right-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-bone-dim">
-          Fig. Architecture
+          Architecture
         </span>
       </div>
 

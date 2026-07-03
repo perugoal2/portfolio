@@ -13,18 +13,18 @@ type BlogPageProps = {
 export default function BlogPage({ posts }: BlogPageProps) {
   return (
     <Layout
-      title="Notes"
+      title="Blog"
       description="Architecture, cloud, and security notes from project work and technical practice."
     >
       <section className="pb-4">
         <SectionHeader
-          eyebrow="Field notes"
+          eyebrow="Blog"
           title="Architecture, cloud & security notes"
           description="Writing on platform design, delivery choices, security decisions, and product-building patterns."
         />
 
         <div className="mt-6 flex items-center gap-4 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-bone-faint">
-          <span>{String(posts.length).padStart(2, "0")} notes</span>
+          <span>{String(posts.length).padStart(2, "0")} posts</span>
           <span className="h-px flex-1 bg-line" />
           <span>Latest first</span>
         </div>

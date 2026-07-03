@@ -16,12 +16,12 @@ type HomePageProps = {
 };
 
 export default function Home({ featuredProjects, featuredPosts }: HomePageProps) {
-  // Engineering title-block: the sheet's identifying record, in place of a generic stat row.
+  // A compact at-a-glance record strip for the hero.
   const titleBlock = [
-    { k: "Drawn by", v: "Peru N" },
-    { k: "Discipline", v: "Architecture · Cloud · Security" },
-    { k: "Status", v: "Open to roles & consulting" },
-    { k: "Primary repo", v: "Agentic IaC Reviewer", href: siteProfile.featuredRepoUrl },
+    { k: "Name", v: "Peru N" },
+    { k: "Focus", v: "Architecture · Cloud · Security" },
+    { k: "Contact", v: "Email", href: siteProfile.emailUrl },
+    { k: "Featured repo", v: "Agentic IaC Reviewer", href: siteProfile.featuredRepoUrl },
   ];
 
   return (
@@ -38,16 +38,16 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
             <span className="hidden text-line-strong sm:inline">/</span>
             <span className="hidden sm:inline">Portfolio</span>
             <span className="rule-draw mx-1 h-px flex-1 bg-line" style={{ animationDelay: "160ms" }} />
-            <span className="whitespace-nowrap"><span className="text-signal">Sheet 00</span> · Index</span>
+            <span className="whitespace-nowrap"><span className="text-signal">Case studies</span> &amp; notes</span>
             <span className="hidden text-line-strong sm:inline">/</span>
-            <span className="hidden whitespace-nowrap sm:inline">Rev. A</span>
+            <span className="hidden whitespace-nowrap sm:inline">{new Date().getFullYear()}</span>
           </div>
 
           {/* sheet body */}
-          <div className="grid gap-10 p-6 sm:p-8 lg:grid-cols-12 lg:gap-8 lg:p-11">
-            <div className="lg:col-span-8">
+          <div className="grid gap-8 p-6 sm:p-7 lg:grid-cols-12 lg:items-center lg:gap-10 lg:p-8">
+            <div className="lg:col-span-7">
               <h1
-                className="headline reveal-wipe text-balance text-[clamp(2.6rem,6.4vw,5.5rem)]"
+                className="headline reveal-wipe text-balance text-[clamp(1.9rem,3.6vw,3.25rem)] leading-[1.05]"
                 style={{ animationDelay: "70ms" }}
               >
                 I design cloud &amp; AI systems built for{" "}
@@ -56,13 +56,13 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
               </h1>
 
               <p
-                className="reveal mt-7 max-w-[46ch] text-pretty text-[1.05rem] leading-8 text-bone-dim"
+                className="reveal mt-5 max-w-[52ch] text-pretty text-[1rem] leading-7 text-bone-dim"
                 style={{ animationDelay: "150ms" }}
               >
                 {siteProfile.summary}
               </p>
 
-              <div className="reveal mt-9 flex flex-wrap items-center gap-5" style={{ animationDelay: "230ms" }}>
+              <div className="reveal mt-7 flex flex-wrap items-center gap-4" style={{ animationDelay: "230ms" }}>
                 <Link href="/projects" className="btn-signal inline-flex items-center gap-2 px-5 py-3">
                   Explore case studies <span aria-hidden="true">→</span>
                 </Link>
@@ -72,10 +72,10 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
               </div>
             </div>
 
-            {/* diagram demoted to a detail callout — asymmetric weight */}
-            <div className="reveal lg:col-span-4 lg:self-end" style={{ animationDelay: "320ms" }}>
+            {/* architecture detail — carries real information beside the statement */}
+            <div className="reveal lg:col-span-5" style={{ animationDelay: "320ms" }}>
               <figure className="ticks border border-line bg-panel/40 p-2.5">
-                <div className="relative aspect-[4/3] overflow-hidden border border-line bg-ink-2">
+                <div className="relative aspect-[16/10] overflow-hidden border border-line bg-ink-2">
                   <Image
                     src={withBasePath("/diagrams/ai-pdf-reader-architecture.svg")}
                     alt="Recent architecture work: AI PDF reader system diagram"
@@ -85,7 +85,7 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
                   />
                 </div>
                 <figcaption className="mt-2.5 flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.16em] text-bone-faint">
-                  <span><span className="text-signal">Detail A</span> — Architecture</span>
+                  <span><span className="text-signal">AI PDF Reader</span> — Architecture</span>
                   <span className="hidden sm:inline">Trust boundaries</span>
                 </figcaption>
               </figure>
@@ -129,12 +129,11 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
       {/* ------------------------------------------------------- CAPABILITY */}
       <section className="mt-28 grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
         <div className="lg:sticky lg:top-24 lg:self-start">
-          <p className="tag tag--signal"><span className="marker">§</span> Capability — Legend</p>
+          <p className="tag tag--signal"><span className="marker">§</span> What I do</p>
           <h2 className="headline mt-4 text-3xl sm:text-[2.4rem]">Three practices, one systems mindset</h2>
           <p className="mt-4 max-w-sm text-[0.95rem] leading-7 text-bone-dim">
             I work end-to-end — from target architecture to delivery to the threat
-            model that keeps it standing. The key at right reads like a drawing&apos;s
-            legend.
+            model that keeps it standing.
           </p>
         </div>
 
@@ -148,7 +147,7 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
               >
                 <dt className={`flex items-center gap-2 pt-1.5 font-mono text-xs uppercase tracking-[0.18em] ${d.text}`}>
                   <span className={`h-2 w-2 ${d.dot}`} aria-hidden="true" />
-                  P-{item.value}
+                  {item.value}
                 </dt>
                 <div>
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -183,7 +182,7 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
       {/* ------------------------------------------------------------ NOTES */}
       <section className="mt-28">
         <SectionHeader
-          eyebrow="Field notes"
+          eyebrow="Blog"
           title="Writing on architecture, delivery & security"
           description="Short pieces on platform design, technical decisions, and implementation patterns from recent work."
         />
@@ -199,8 +198,8 @@ export default function Home({ featuredProjects, featuredPosts }: HomePageProps)
       <section className="mt-28 border border-line bg-panel/30 p-8 sm:p-12">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="max-w-lg">
-            <p className="tag tag--signal"><span className="marker">§</span> Elsewhere</p>
-            <h2 className="headline mt-4 text-3xl sm:text-4xl">Let&apos;s trace the boundaries together.</h2>
+            <p className="tag tag--signal"><span className="marker">§</span> Get in touch</p>
+            <h2 className="headline mt-4 text-3xl sm:text-4xl">Let&apos;s build something solid together.</h2>
             <p className="mt-4 text-sm leading-7 text-bone-dim">
               Open to architecture, cloud, and security engineering conversations. The links below are the fastest way through.
             </p>

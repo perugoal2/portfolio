@@ -39,12 +39,12 @@ const themes = [
 export default function AboutPage() {
   return (
     <Layout
-      title="Profile"
+      title="About"
       description="Background across software architecture, cloud engineering, and security engineering."
     >
       <section className="space-y-14 pb-4">
         <SectionHeader
-          eyebrow="Profile"
+          eyebrow="About"
           title="Architecture, cloud & security, told through case studies"
           description="This site brings together projects, diagrams, and technical writing in a format that is easy to browse and easy to keep updated."
         />

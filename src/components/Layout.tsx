@@ -29,10 +29,10 @@ function HeaderIconLink({
 }
 
 const navigation = [
-  { href: "/", label: "Index" },
-  { href: "/projects", label: "Work" },
-  { href: "/blog", label: "Notes" },
-  { href: "/about", label: "Profile" },
+  { href: "/", label: "Home" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
 ];
 
 type LayoutProps = PropsWithChildren<{
@@ -141,14 +141,14 @@ export function Layout({ title, description, children }: LayoutProps) {
             <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
               <div className="max-w-md">
                 <p className="tag tag--signal">
-                  <span className="marker">§</span> Colophon
+                  <span className="marker">§</span> Get in touch
                 </p>
                 <p className="mt-3 font-display text-2xl text-bone">
                   {siteProfile.name}
                 </p>
                 <p className="mt-2 text-sm leading-7 text-bone-dim">
                   {siteProfile.headline}. Architecture case studies, real projects,
-                  and practical security thinking — set in a running blueprint.
+                  and practical security thinking.
                 </p>
               </div>
 
@@ -169,8 +169,8 @@ export function Layout({ title, description, children }: LayoutProps) {
             </div>
 
             <div className="mt-8 flex flex-col gap-1 border-t border-line pt-4 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-bone-faint sm:flex-row sm:justify-between">
-              <span>© {new Date().getFullYear()} — All systems drafted by hand</span>
-              <span>Rev. A · Redline Blueprint</span>
+              <span>© {new Date().getFullYear()} {siteProfile.name}. All rights reserved.</span>
+              <span>Built with Next.js &amp; Tailwind</span>
             </div>
           </footer>
         </div>

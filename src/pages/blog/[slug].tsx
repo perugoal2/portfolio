@@ -19,7 +19,7 @@ export default function BlogPostPage({ post }: BlogPostPageProps) {
           href="/blog"
           className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-bone-dim transition hover:text-signal"
         >
-          <span aria-hidden="true">←</span> Back to notes
+          <span aria-hidden="true">←</span> Back to blog
         </Link>
 
         <header className="mt-8">
