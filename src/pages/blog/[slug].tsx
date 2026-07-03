@@ -14,21 +14,24 @@ type BlogPostPageProps = {
 export default function BlogPostPage({ post }: BlogPostPageProps) {
   return (
     <Layout title={post.title} description={post.summary}>
-      <section className="mx-auto max-w-4xl pb-10">
-        <Link href="/blog" className="mb-8 inline-flex text-sm font-semibold text-cyan-300 transition hover:text-cyan-200">
-          ← Back to blog
+      <article className="mx-auto max-w-3xl pb-4">
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-bone-dim transition hover:text-signal"
+        >
+          <span aria-hidden="true">←</span> Back to notes
         </Link>
 
-        <header className="rounded-[2rem] border border-white/10 bg-white/5 p-8">
-          <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.25em] text-slate-400">
-            <span>{post.category}</span>
-            <span>•</span>
+        <header className="mt-8">
+          <div className="flex flex-wrap items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-bone-faint">
+            <span className="text-signal">{post.category}</span>
+            <span className="text-line-strong">/</span>
             <span>{post.date}</span>
-            <span>•</span>
+            <span className="text-line-strong">/</span>
             <span>{post.readingTime}</span>
           </div>
-          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white">{post.title}</h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-300">{post.summary}</p>
+          <h1 className="headline mt-6 text-4xl sm:text-5xl">{post.title}</h1>
+          <p className="mt-5 text-lg leading-8 text-bone-dim">{post.summary}</p>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
@@ -37,10 +40,10 @@ export default function BlogPostPage({ post }: BlogPostPageProps) {
           </div>
         </header>
 
-        <div className="mt-8 rounded-[2rem] border border-white/10 bg-slate-950/70 p-8">
+        <div className="mt-10 border-t border-line pt-10">
           <MarkdownArticle content={post.content} />
         </div>
-      </section>
+      </article>
     </Layout>
   );
 }
