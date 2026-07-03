@@ -1,22 +1,39 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ------------------------------------------------------------------ *
+ *  REDLINE BLUEPRINT — a technical-editorial design system
+ *  warm ink canvas · bone type · vermillion redline · engineering grid
+ * ------------------------------------------------------------------ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* fonts are injected at runtime by next/font (see _app.tsx) */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", monospace;
+
+  /* palette */
+  --color-ink: #0b0a0d;
+  --color-ink-2: #100e12;
+  --color-panel: #16141a;
+  --color-panel-2: #1c1a21;
+  --color-bone: #f1ece3;
+  --color-bone-dim: #c7c0b4;
+  --color-bone-faint: #948c7f;
+  --color-signal: #3d63ff;
+  --color-signal-soft: #9db0ff;
+  /* categorical domain hues — color encodes practice domain, never decoration.
+     cobalt(signal)=Cloud · jade=Product/AI · violet=Security */
+  --color-jade: #35e0a0;
+  --color-violet: #8b7cf6;
+  --color-violet-soft: #b4a7ff;
+  --color-line: rgba(236, 231, 221, 0.10);
+  --color-line-strong: rgba(236, 231, 221, 0.18);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --grid-fine: rgba(174, 190, 255, 0.04);
+  --grid-bold: rgba(174, 190, 255, 0.07);
+  --redline: #3d63ff;
 }
 
 * {
@@ -25,16 +42,26 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* scale the whole rem-based system up a notch — larger, more confident type */
+  font-size: 17.5px;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 18px;
+  }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   margin: 0;
   min-height: 100vh;
+  background: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -43,77 +70,540 @@ a {
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.28);
-  color: #ecfeff;
+  background: var(--redline);
+  color: #ffffff;
 }
 
+/* thin editorial scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0a0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a272e;
+  border: 2px solid #0b0a0d;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--redline);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Blueprint canvas — layered engineering grid + warm bloom + grain
+ * ------------------------------------------------------------------ */
+
+.blueprint {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--color-ink);
+  background-image:
+    linear-gradient(var(--grid-fine) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-fine) 1px, transparent 1px),
+    linear-gradient(var(--grid-bold) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-bold) 1px, transparent 1px);
+  background-size:
+    28px 28px,
+    28px 28px,
+    140px 140px,
+    140px 140px;
+  background-position: center;
+}
+
+.blueprint::before {
+  /* warm bloom, top-left origin like a drafting lamp */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 55% at 12% -5%, rgba(61, 99, 255, 0.14), transparent 60%),
+    radial-gradient(55% 45% at 100% 0%, rgba(61, 99, 255, 0.07), transparent 55%),
+    radial-gradient(90% 70% at 50% 120%, rgba(11, 10, 13, 0.9), transparent 60%);
+}
+
+.blueprint::after {
+  /* film grain */
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* ------------------------------------------------------------------ *
+ *  Type helpers
+ * ------------------------------------------------------------------ */
+
+.font-display {
+  font-family: var(--font-display);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* mono micro-label used for eyebrows / coordinates / metadata */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-bone-dim);
+}
+
+.tag--signal {
+  color: var(--redline);
+}
+
+/* redline marker glyph before a label */
+.marker {
+  color: var(--redline);
+}
+
+/* display headline defaults */
+.headline {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  color: var(--color-bone);
+  text-wrap: balance;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Registration ticks — draughtsman corner crosses on panels
+ * ------------------------------------------------------------------ */
+
+.ticks {
+  position: relative;
+}
+.ticks::before,
+.ticks::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, color 0.3s ease;
+  color: var(--color-bone-dim);
+}
+.ticks::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid currentColor;
+  border-left: 1px solid currentColor;
+}
+.ticks::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+}
+.ticks:hover::before,
+.ticks:hover::after {
+  opacity: 1;
+  color: var(--redline);
+}
+
+/* animated redline underline for links */
+.rl-link {
+  position: relative;
+  display: inline-block;
+}
+.rl-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: var(--redline);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rl-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* solid redline button */
+.btn-signal {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #f4f6ff;
+  background: #2138b8;
+  border: 1px solid rgba(157, 176, 255, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.btn-signal:hover {
+  background: #2c47d4;
+  border-color: rgba(157, 176, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px -12px rgba(61, 99, 255, 0.6);
+}
+
+/* ghost / outline button */
+.btn-ghost {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--color-bone);
+  border: 1px solid var(--color-line-strong);
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.btn-ghost:hover {
+  border-color: var(--redline);
+  color: #fff;
+  background: rgba(61, 99, 255, 0.08);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Staggered page-load reveal
+ * ------------------------------------------------------------------ */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes draw-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.rule-draw {
+  transform-origin: left;
+  animation: draw-x 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* signature hero headline — plotted like ink drawn across the sheet */
+@keyframes wipe-in {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    filter: blur(7px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.reveal-wipe {
+  opacity: 0;
+  animation: wipe-in 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Scroll-in list rhythm — card grids only (progressive enhancement)
+ *  Hidden state is gated on .js-anim (added pre-paint only when motion
+ *  is allowed), so no-JS and reduced-motion always render visible.
+ * ------------------------------------------------------------------ */
+
+.js-anim [data-stagger] > * {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.js-anim [data-stagger].is-in > * {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js-anim [data-stagger].is-in > *:nth-child(2) { transition-delay: 80ms; }
+.js-anim [data-stagger].is-in > *:nth-child(3) { transition-delay: 160ms; }
+.js-anim [data-stagger].is-in > *:nth-child(4) { transition-delay: 240ms; }
+.js-anim [data-stagger].is-in > *:nth-child(5) { transition-delay: 320ms; }
+.js-anim [data-stagger].is-in > *:nth-child(6) { transition-delay: 400ms; }
+
+/* tactile feedback + keyboard focus (accessibility) */
+.btn-signal:active,
+.btn-ghost:active {
+  transform: translateY(0) scale(0.98);
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-wipe,
+  .rule-draw {
+    animation: none;
+    opacity: 1;
+    clip-path: none;
+    filter: none;
+    transform: none;
+  }
+  .js-anim [data-stagger] > * {
+    opacity: 1;
+    transform: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Long-form article (project / blog markdown)
+ * ------------------------------------------------------------------ */
+
 .prose-panel {
-  color: #dbe4ef;
+  color: var(--color-bone-dim);
+  font-family: var(--font-body);
 }
 
 .prose-panel h1,
 .prose-panel h2,
 .prose-panel h3 {
-  color: #f8fafc !important;
-  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--color-bone);
+  font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 .prose-panel h1 {
-  font-size: 2rem;
+  font-size: 2.1rem;
   margin: 0 0 1rem;
 }
 
 .prose-panel h2 {
-  font-size: 1.45rem;
-  margin: 2rem 0 0.85rem;
+  font-size: 1.55rem;
+  margin: 2.4rem 0 0.9rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--color-line);
 }
 
 .prose-panel h3 {
   font-size: 1.2rem;
-  margin: 1.5rem 0 0.75rem;
+  margin: 1.6rem 0 0.6rem;
+  color: var(--color-bone);
 }
 
 .prose-panel p,
 .prose-panel li,
 .prose-panel blockquote {
   font-size: 1rem;
-  line-height: 1.9;
+  line-height: 1.85;
+  text-wrap: pretty;
 }
 
 .prose-panel p,
 .prose-panel ul,
+.prose-panel ol,
 .prose-panel blockquote {
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
 }
 
-.prose-panel ul {
-  padding-left: 1.25rem;
+.prose-panel ul,
+.prose-panel ol {
+  padding-left: 1.15rem;
 }
 
 .prose-panel li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.prose-panel li::marker {
+  color: var(--redline);
+}
+
+.prose-panel strong {
+  color: var(--color-bone);
+  font-weight: 600;
 }
 
 .prose-panel code {
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
-  color: #a5f3fc;
-  font-size: 0.95rem;
-  padding: 0.15rem 0.55rem;
+  background: rgba(61, 99, 255, 0.10);
+  border: 1px solid rgba(61, 99, 255, 0.24);
+  border-radius: 3px;
+  color: var(--color-signal-soft);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.prose-panel pre {
+  background: #0b0a0d;
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  padding: 1.1rem 1.2rem;
+  overflow-x: auto;
+}
+
+.prose-panel pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-bone-dim);
 }
 
 .prose-panel a {
-  color: #67e8f9;
-  text-decoration: underline;
-  text-decoration-color: rgba(103, 232, 249, 0.4);
+  color: var(--color-bone);
+  border-bottom: 1px solid var(--redline);
+  transition: color 0.2s ease;
+}
+.prose-panel a:hover {
+  color: var(--redline);
 }
 
 .prose-panel blockquote {
-  border-left: 3px solid rgba(34, 211, 238, 0.55);
-  color: #cbd5e1;
+  border-left: 2px solid var(--redline);
+  color: var(--color-bone);
   margin-left: 0;
-  padding-left: 1rem;
+  padding-left: 1.1rem;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Adaptation — touch, safe areas, and print
+ * ------------------------------------------------------------------ */
+
+/* Touch / coarse pointer: enforce 44px minimum hit targets on the chrome
+   (nav links, header icon links, footer links) without bloating mouse UI. */
+@media (pointer: coarse) {
+  header nav a,
+  header nav button,
+  footer a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  header a[aria-label] {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+  }
+}
+
+/* Keep purely-decorative lift off touch devices so it can't "stick" on tap. */
+@media (hover: none) {
+  .btn-signal:hover,
+  .btn-ghost:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Notch / rounded-corner safe areas (no-op where insets are 0, e.g. desktop). */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* ---------------------------------------------------------------- PRINT *
+ * Recruiters export portfolios to PDF. Flip to ink-on-paper, drop the
+ * dark canvas + interactive chrome, force revealed content, expose URLs. */
+@media print {
+  :root {
+    color-scheme: light;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+    color: #14130f !important;
+  }
+
+  /* drop the dark atmosphere and interactive chrome */
+  .blueprint,
+  header nav,
+  header a[aria-label],
+  footer,
+  .btn-signal,
+  .btn-ghost {
+    display: none !important;
+  }
+
+  /* force any scroll-revealed / entrance content fully visible on paper */
+  .reveal,
+  .reveal-wipe,
+  [data-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
+
+  /* neutralize the light-on-dark type to readable ink */
+  .text-bone,
+  .text-bone-dim,
+  .text-bone-faint,
+  .headline,
+  h1, h2, h3, h4,
+  p, li, dt, dd, span, a, strong {
+    color: #14130f !important;
+  }
+
+  /* keep the domain/signal accents, darkened for paper legibility */
+  .text-signal,
+  .text-signal-soft { color: #1f39b8 !important; }
+  .text-jade { color: #0a6b48 !important; }
+  .text-violet,
+  .text-violet-soft { color: #5238b0 !important; }
+
+  /* flatten surfaces + lines for paper */
+  [class*="bg-panel"],
+  [class*="bg-ink"] { background: transparent !important; }
+  .bg-line { background: #d9d5cc !important; }
+  [class*="border-"] { border-color: #cfcabf !important; }
+  * { box-shadow: none !important; }
+
+  /* expose destination of content links */
+  main a[href^="http"]::after {
+    content: " [" attr(href) "]";
+    font-size: 0.72em;
+    color: #6a6558;
+    word-break: break-all;
+  }
+
+  /* keep blocks intact across page breaks */
+  main { max-width: 100% !important; }
+  section, article, figure, li, .ticks {
+    break-inside: avoid;
+  }
+  h1, h2, h3 { break-after: avoid; }
 }
