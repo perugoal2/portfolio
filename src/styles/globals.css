@@ -16,24 +16,26 @@
   --color-ink-2: #100e12;
   --color-panel: #16141a;
   --color-panel-2: #1c1a21;
-  --color-bone: #f1ece3;
-  --color-bone-dim: #c7c0b4;
-  --color-bone-faint: #948c7f;
-  --color-signal: #3d63ff;
-  --color-signal-soft: #9db0ff;
+  --color-bone: #f7f5f1;
+  --color-bone-dim: #ddd9d2;
+  --color-bone-faint: #a69e91;
+  --color-signal: #8b5cff;
+  --color-signal-soft: #c4b2ff;
   /* categorical domain hues — color encodes practice domain, never decoration.
-     cobalt(signal)=Cloud · jade=Product/AI · violet=Security */
+     cobalt=Cloud · jade=Product/AI · violet(signal)=Security */
   --color-jade: #35e0a0;
-  --color-violet: #8b7cf6;
-  --color-violet-soft: #b4a7ff;
+  --color-violet: #8b5cff;
+  --color-violet-soft: #c4b2ff;
+  --color-cobalt: #3d63ff;
+  --color-cobalt-soft: #9db0ff;
   --color-line: rgba(236, 231, 221, 0.10);
   --color-line-strong: rgba(236, 231, 221, 0.18);
 }
 
 :root {
-  --grid-fine: rgba(174, 190, 255, 0.04);
-  --grid-bold: rgba(174, 190, 255, 0.07);
-  --redline: #3d63ff;
+  --grid-fine: rgba(196, 178, 255, 0.04);
+  --grid-bold: rgba(196, 178, 255, 0.07);
+  --redline: #8b5cff;
 }
 
 * {
@@ -99,6 +101,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
   pointer-events: none;
   background-color: var(--color-ink);
   background-image:
@@ -114,15 +117,140 @@ a {
   background-position: center;
 }
 
+/* recurring scanner sweep — a faint violet light bar crosses the grid */
+.blueprint-scan {
+  position: absolute;
+  top: -60%;
+  left: 0;
+  width: 42%;
+  height: 220%;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(139, 92, 255, 0.05) 42%,
+    rgba(196, 178, 255, 0.11) 50%,
+    rgba(139, 92, 255, 0.05) 58%,
+    transparent 100%
+  );
+  filter: blur(8px);
+  transform: translate3d(-70vw, 0, 0) skewX(-12deg);
+  animation: scan-sweep 9s linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes scan-sweep {
+  0% {
+    transform: translate3d(-70vw, 0, 0) skewX(-12deg);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(155vw, 0, 0) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
+/* glowing sci-fi dev-tree in the footer — lush branch canopy with a
+   bioluminescent leaf glow; grows in when scrolled into view */
+.dev-tree {
+  display: block;
+  width: auto;
+  opacity: 0.95;
+}
+/* glow only on the (mostly-static) branches; leaves glow via their radial
+   fill so hundreds of them can twinkle without a per-frame filter pass */
+.dev-tree__branches {
+  filter: drop-shadow(0 0 4px rgba(139, 92, 255, 0.55));
+}
+
+/* Default (no-JS / reduced motion): tree is fully drawn and visible. */
+.dev-tree__leaf {
+  opacity: 0.82;
+}
+
+/* JS + motion allowed: start hidden, then grow/reveal on scroll into view. */
+.js-anim .dev-tree__branch {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.js-anim .dev-tree__leaf {
+  opacity: 0;
+}
+
+.js-anim .dev-tree.in-view .dev-tree__branch {
+  animation: tree-grow 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+.js-anim .dev-tree.in-view .dev-tree__leaf {
+  animation: leaf-in 0.7s ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+.js-anim .dev-tree.in-view .dev-tree__leaf--spark {
+  animation: leaf-spark 4.5s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes tree-grow {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes leaf-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.82;
+  }
+}
+@keyframes leaf-spark {
+  0% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+  76% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
 .blueprint::before {
-  /* warm bloom, top-left origin like a drafting lamp */
+  /* violet bloom that slowly drifts — subtle ambient background motion */
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -4%;
   background:
-    radial-gradient(70% 55% at 12% -5%, rgba(61, 99, 255, 0.14), transparent 60%),
-    radial-gradient(55% 45% at 100% 0%, rgba(61, 99, 255, 0.07), transparent 55%),
+    radial-gradient(60% 50% at 14% -5%, rgba(139, 92, 255, 0.20), transparent 60%),
+    radial-gradient(52% 44% at 100% 2%, rgba(139, 92, 255, 0.11), transparent 55%),
     radial-gradient(90% 70% at 50% 120%, rgba(11, 10, 13, 0.9), transparent 60%);
+  transform-origin: center;
+  animation: bloom-drift 26s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes bloom-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -1.5%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 }
 
 .blueprint::after {
@@ -239,16 +367,16 @@ a {
   letter-spacing: 0.12em;
   font-size: 0.76rem;
   font-weight: 600;
-  color: #f4f6ff;
-  background: #2138b8;
-  border: 1px solid rgba(157, 176, 255, 0.28);
+  color: #f6f3ff;
+  background: #5a2fce;
+  border: 1px solid rgba(196, 178, 255, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 .btn-signal:hover {
-  background: #2c47d4;
-  border-color: rgba(157, 176, 255, 0.5);
+  background: #6a3fe8;
+  border-color: rgba(196, 178, 255, 0.55);
   transform: translateY(-1px);
-  box-shadow: 0 10px 28px -12px rgba(61, 99, 255, 0.6);
+  box-shadow: 0 10px 30px -12px rgba(139, 92, 255, 0.65);
 }
 
 /* ghost / outline button */
@@ -265,7 +393,7 @@ a {
 .btn-ghost:hover {
   border-color: var(--redline);
   color: #fff;
-  background: rgba(61, 99, 255, 0.08);
+  background: rgba(139, 92, 255, 0.08);
 }
 
 /* ------------------------------------------------------------------ *
@@ -455,8 +583,8 @@ a {
 }
 
 .prose-panel code {
-  background: rgba(61, 99, 255, 0.10);
-  border: 1px solid rgba(61, 99, 255, 0.24);
+  background: rgba(139, 92, 255, 0.10);
+  border: 1px solid rgba(139, 92, 255, 0.24);
   border-radius: 3px;
   color: var(--color-signal-soft);
   font-family: var(--font-mono);

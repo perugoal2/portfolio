@@ -6,7 +6,7 @@ const enableAnim = `try{if(!matchMedia('(prefers-reduced-motion: reduce)').match
 
 // Failsafe: if React never hydrates / no IntersectionObserver, reveal everything
 // so a section can never ship blank.
-const revealFailsafe = `setTimeout(function(){try{document.querySelectorAll('[data-stagger]').forEach(function(e){e.classList.add('is-in')})}catch(e){}},2600)`;
+const revealFailsafe = `setTimeout(function(){try{document.querySelectorAll('[data-stagger]').forEach(function(e){e.classList.add('is-in')});document.querySelectorAll('.dev-tree').forEach(function(e){e.classList.add('in-view')})}catch(e){}},2600)`;
 
 export default function Document() {
   return (

@@ -36,11 +36,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     if (!document.documentElement.classList.contains("js-anim")) return;
 
-    const grids = Array.from(document.querySelectorAll<HTMLElement>("[data-stagger]"));
-    if (grids.length === 0) return;
+    const targets = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-stagger], .dev-tree"),
+    );
+    if (targets.length === 0) return;
+
+    const reveal = (el: Element) =>
+      el.classList.add(el.classList.contains("dev-tree") ? "in-view" : "is-in");
 
     if (!("IntersectionObserver" in window)) {
-      grids.forEach((g) => g.classList.add("is-in"));
+      targets.forEach(reveal);
       return;
     }
 
@@ -48,15 +53,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-in");
+            reveal(entry.target);
             io.unobserve(entry.target);
           }
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
     );
 
-    grids.forEach((g) => io.observe(g));
+    targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
   }, [router.asPath]);
 

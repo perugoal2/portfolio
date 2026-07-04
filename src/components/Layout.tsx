@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { DevTree } from "@/components/DevTree";
 import { siteProfile } from "@/lib/site";
 import type { PropsWithChildren, ReactNode } from "react";
 
@@ -51,7 +52,9 @@ export function Layout({ title, description, children }: LayoutProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </Head>
 
-      <div className="blueprint" aria-hidden="true" />
+      <div className="blueprint" aria-hidden="true">
+        <span className="blueprint-scan" />
+      </div>
 
       <div className="relative z-10 min-h-screen text-bone">
         {/* top hairline + running header */}
@@ -137,24 +140,32 @@ export function Layout({ title, description, children }: LayoutProps) {
         <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-10 sm:px-8 lg:px-10">
           <main>{children}</main>
 
-          <footer className="mt-24 border-t border-line pt-8">
-            <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-              <div className="max-w-md">
+          <footer className="relative mt-20 overflow-hidden border-t border-line pt-8">
+            {/* one compact row: colophon · tree · links, vertically centered */}
+            <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6">
+              <div className="max-w-xs">
                 <p className="tag tag--signal">
                   <span className="marker">§</span> Get in touch
                 </p>
                 <p className="mt-3 font-display text-2xl text-bone">
                   {siteProfile.name}
                 </p>
-                <p className="mt-2 text-sm leading-7 text-bone-dim">
+                <p className="mt-2 text-sm leading-6 text-bone-dim">
                   {siteProfile.headline}. Architecture case studies, real projects,
                   and practical security thinking.
                 </p>
               </div>
 
-              <div className="flex flex-col gap-4">
+              <div
+                className="pointer-events-none order-last w-full md:order-none md:w-auto md:justify-self-center"
+                aria-hidden="true"
+              >
+                <DevTree className="mx-auto h-[240px] w-auto" />
+              </div>
+
+              <div className="flex flex-col gap-4 md:justify-self-end md:text-right">
                 <p className="tag">Elsewhere</p>
-                <div className="flex flex-wrap gap-4 font-mono text-xs uppercase tracking-[0.16em]">
+                <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs uppercase tracking-[0.16em] md:justify-end">
                   <a href={siteProfile.githubUrl} target="_blank" rel="noreferrer" className="rl-link text-bone-dim hover:text-bone">
                     GitHub
                   </a>
@@ -168,7 +179,8 @@ export function Layout({ title, description, children }: LayoutProps) {
               </div>
             </div>
 
-            <div className="mt-8 flex flex-col gap-1 border-t border-line pt-4 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-bone-faint sm:flex-row sm:justify-between">
+            {/* legal bar */}
+            <div className="mt-8 flex flex-col gap-1 border-t border-line pt-4 pb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-bone-faint sm:flex-row sm:justify-between">
               <span>© {new Date().getFullYear()} {siteProfile.name}. All rights reserved.</span>
               <span>Built with Next.js &amp; Tailwind</span>
             </div>

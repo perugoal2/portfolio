@@ -55,7 +55,7 @@ type Domain = {
 };
 
 export const domains: Record<DomainId, Domain> = {
-  cloud: { id: "cloud", label: "Cloud", text: "text-signal-soft", dot: "bg-signal" },
+  cloud: { id: "cloud", label: "Cloud", text: "text-cobalt-soft", dot: "bg-cobalt" },
   product: { id: "product", label: "Product · AI", text: "text-jade", dot: "bg-jade" },
   security: { id: "security", label: "Security", text: "text-violet-soft", dot: "bg-violet" },
 };
