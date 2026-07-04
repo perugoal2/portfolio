@@ -3,12 +3,12 @@
   <rect x="60" y="60" width="1080" height="580" rx="28" fill="#17161c" stroke="#2b2932"/>
   <text x="100" y="135" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="40" font-weight="700">Replace with your architecture diagram</text>
   <text x="100" y="185" fill="#9a9288" font-family="Arial, sans-serif" font-size="22">Store SVG or PNG files in public/diagrams and reference them in project markdown.</text>
-  <rect x="100" y="250" width="300" height="120" rx="24" fill="#15161d" stroke="#5877ff"/>
+  <rect x="100" y="250" width="300" height="120" rx="24" fill="#15161d" stroke="#9a6fff"/>
   <text x="150" y="320" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Edge / Clients</text>
-  <rect x="450" y="250" width="300" height="120" rx="24" fill="#1a1e26" stroke="#7f97ff"/>
+  <rect x="450" y="250" width="300" height="120" rx="24" fill="#1a1e26" stroke="#b19dff"/>
   <text x="520" y="320" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Core Services</text>
-  <rect x="800" y="250" width="300" height="120" rx="24" fill="#181a2c" stroke="#3d63ff"/>
+  <rect x="800" y="250" width="300" height="120" rx="24" fill="#1c1830" stroke="#8b5cff"/>
   <text x="875" y="320" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Data / Events</text>
-  <path d="M400 310H450" stroke="#3d63ff" stroke-width="8" stroke-linecap="round"/>
-  <path d="M750 310H800" stroke="#3d63ff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M400 310H450" stroke="#8b5cff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M750 310H800" stroke="#8b5cff" stroke-width="8" stroke-linecap="round"/>
 </svg>

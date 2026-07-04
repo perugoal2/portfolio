@@ -7,7 +7,7 @@
   <text x="188" y="327" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Threats</text>
   <rect x="475" y="260" width="250" height="120" rx="24" fill="#241a12" stroke="#8a8378"/>
   <text x="542" y="327" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Boundaries</text>
-  <rect x="830" y="260" width="250" height="120" rx="24" fill="#152018" stroke="#7f97ff"/>
+  <rect x="830" y="260" width="250" height="120" rx="24" fill="#152018" stroke="#b19dff"/>
   <text x="905" y="327" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Controls</text>
   <path d="M370 320H475" stroke="#8a8378" stroke-width="8" stroke-linecap="round"/>
   <path d="M725 320H830" stroke="#8a8378" stroke-width="8" stroke-linecap="round"/>

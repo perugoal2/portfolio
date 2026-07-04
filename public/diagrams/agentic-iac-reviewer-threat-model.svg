@@ -9,10 +9,10 @@
   <rect x="478" y="166" width="470" height="536" rx="32" fill="#17161c" stroke="#8a8378" stroke-dasharray="16 10"/>
   <text x="586" y="222" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Trusted Review Boundary</text>
 
-  <rect x="556" y="286" width="306" height="112" rx="22" fill="#181a2c" stroke="#3d63ff"/>
+  <rect x="556" y="286" width="306" height="112" rx="22" fill="#1c1830" stroke="#8b5cff"/>
   <text x="602" y="352" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Scanner Evidence</text>
 
-  <rect x="556" y="448" width="306" height="122" rx="22" fill="#181a2c" stroke="#3d63ff"/>
+  <rect x="556" y="448" width="306" height="122" rx="22" fill="#1c1830" stroke="#8b5cff"/>
   <text x="634" y="510" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Agent Layer</text>
   <text x="600" y="544" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="22">Bounded retries + validation</text>
 
@@ -22,7 +22,7 @@
   <rect x="1026" y="408" width="284" height="122" rx="24" fill="#241419" stroke="#8a8378"/>
   <text x="1068" y="480" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Unsafe Mutation</text>
 
-  <rect x="1026" y="590" width="284" height="132" rx="24" fill="#152018" stroke="#7f97ff"/>
+  <rect x="1026" y="590" width="284" height="132" rx="24" fill="#152018" stroke="#b19dff"/>
   <text x="1116" y="648" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Controls</text>
   <text x="1060" y="684" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="22">Separate patches/, validation,</text>
   <text x="1082" y="714" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="22">scanner evidence, citations</text>
@@ -30,5 +30,5 @@
   <path d="M374 282H478" stroke="#8a8378" stroke-width="8" stroke-linecap="round"/>
   <path d="M948 282H1026" stroke="#8a8378" stroke-width="8" stroke-linecap="round"/>
   <path d="M862 508H1026" stroke="#8a8378" stroke-width="8" stroke-linecap="round"/>
-  <path d="M948 656H1026" stroke="#7f97ff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M948 656H1026" stroke="#b19dff" stroke-width="8" stroke-linecap="round"/>
 </svg>

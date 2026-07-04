@@ -2,21 +2,21 @@
   <rect width="1400" height="860" rx="36" fill="#0b0a0d"/>
   <text x="70" y="90" fill="#ece7dd" font-family="Arial, sans-serif" font-size="34" font-weight="700">Cloud SOC Analytics Workbench</text>
   <text x="70" y="128" fill="#9a9288" font-family="Arial, sans-serif" font-size="20">Telemetry ingestion, enrichment pipelines, controlled analyst access, and response workflows.</text>
-  <rect x="80" y="220" width="280" height="120" rx="24" fill="#15161d" stroke="#5877ff"/>
+  <rect x="80" y="220" width="280" height="120" rx="24" fill="#15161d" stroke="#9a6fff"/>
   <text x="150" y="292" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Telemetry Sources</text>
-  <rect x="420" y="220" width="260" height="120" rx="24" fill="#1a1e26" stroke="#7f97ff"/>
+  <rect x="420" y="220" width="260" height="120" rx="24" fill="#1a1e26" stroke="#b19dff"/>
   <text x="482" y="292" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Ingestion Bus</text>
-  <rect x="740" y="220" width="270" height="120" rx="24" fill="#181a2c" stroke="#3d63ff"/>
+  <rect x="740" y="220" width="270" height="120" rx="24" fill="#1c1830" stroke="#8b5cff"/>
   <text x="792" y="292" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Enrichment</text>
-  <rect x="1070" y="220" width="250" height="120" rx="24" fill="#201e26" stroke="#6d88ff"/>
+  <rect x="1070" y="220" width="250" height="120" rx="24" fill="#201e26" stroke="#a488ff"/>
   <text x="1122" y="292" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Workbench</text>
-  <rect x="520" y="470" width="360" height="120" rx="24" fill="#17161c" stroke="#3d63ff"/>
+  <rect x="520" y="470" width="360" height="120" rx="24" fill="#17161c" stroke="#8b5cff"/>
   <text x="583" y="542" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Evidence Store + Audit</text>
-  <rect x="950" y="470" width="280" height="120" rx="24" fill="#17161c" stroke="#3d63ff"/>
+  <rect x="950" y="470" width="280" height="120" rx="24" fill="#17161c" stroke="#8b5cff"/>
   <text x="1012" y="542" fill="#d5cfc4" font-family="Arial, sans-serif" font-size="28">Response Tools</text>
-  <path d="M360 280H420" stroke="#5877ff" stroke-width="8" stroke-linecap="round"/>
-  <path d="M680 280H740" stroke="#5877ff" stroke-width="8" stroke-linecap="round"/>
-  <path d="M1010 280H1070" stroke="#5877ff" stroke-width="8" stroke-linecap="round"/>
-  <path d="M875 340V470" stroke="#3d63ff" stroke-width="8" stroke-linecap="round"/>
-  <path d="M1010 530H950" stroke="#3d63ff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M360 280H420" stroke="#9a6fff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M680 280H740" stroke="#9a6fff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1010 280H1070" stroke="#9a6fff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M875 340V470" stroke="#8b5cff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1010 530H950" stroke="#8b5cff" stroke-width="8" stroke-linecap="round"/>
 </svg>
