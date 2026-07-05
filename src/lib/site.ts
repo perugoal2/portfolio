@@ -82,8 +82,8 @@ export const homeHighlights: {
   },
   {
     value: "02",
-    label: "Cloud platforms",
-    detail: "Platform and landing zone work focused on governance, delivery, and operational clarity.",
+    label: "Platform & reliability",
+    detail: "Kubernetes and IaC tooling — from infrastructure security review to incident-reliability intelligence.",
     domain: "cloud",
   },
   {

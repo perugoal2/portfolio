@@ -12,6 +12,8 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="mask-icon" href="/favicon.svg" color="#8b5cff" />
         <script dangerouslySetInnerHTML={{ __html: enableAnim }} />
       </Head>
       <body>

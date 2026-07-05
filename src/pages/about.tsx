@@ -4,7 +4,7 @@ import { SectionHeader } from "@/components/SectionHeader";
 
 const strengths = [
   "Enterprise architecture roadmaps",
-  "Cloud landing zones and platform engineering",
+  "AI systems and retrieval-backed developer tooling",
   "Application modernization and resiliency",
   "Threat modeling and security architecture reviews",
   "Executive-ready technical storytelling",
