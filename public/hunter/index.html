@@ -349,12 +349,12 @@ const TREES=[
   ["D","Terraform a VPC with modules and remote state",1],["D","Minimal multi-stage Docker images",1],
   ["C","CI/CD pipeline deploying to Kubernetes",1],["C","Metrics, logs and alerts for a service",1],
   ["B","Multi-account AWS with Organizations and SCPs",0],["B","GitOps with Argo CD or Flux",0],
-  ["A","Run production at scale (1,000+ clusters, Viasat)",1],["A","Hold an SLA with on-call and postmortems",1],
+  ["A","Run production at scale",1],["A","Hold an SLA with on-call and postmortems",1],
   ["S","Platform lead owning the roadmap",0],["S","Org-wide cost and reliability programme",0]]},
  {id:"devsecops",sig:"DS",name:"DevSecOps",sub:"Secure pipelines and supply chain",nodes:[
   ["E","Explain the OWASP Top 10 with examples",1],["E","Secure code review basics",1],
   ["D","SAST and secret scanning in CI (Semgrep, gitleaks)",1],["D","Dependency scanning with a merge gate",1],
-  ["C","DAST in the pipeline (OWASP ZAP)",0],["C","IaC scanning with Checkov and Trivy (IaC reviewer)",1],
+  ["C","DAST in the pipeline (OWASP ZAP)",0],["C","IaC scanning with Checkov and Trivy",1],
   ["B","SBOM and build provenance (SLSA level 2)",0],["B","AI code review in CI on every merge request",1],
   ["A","Auto-remediation pipeline for cloud findings",0],["A","Security metrics: MTTR and coverage dashboard",0],
   ["S","Own the secure SDLC for an organisation",0],["S","Run a security champions programme",0]]},
@@ -376,7 +376,7 @@ const TREES=[
   ["E","OAuth 2.0 and OIDC flows",1],["E","AWS IAM policy evaluation logic",0],
   ["D","Least privilege with IAM Access Analyzer",0],["D","SSO with IAM Identity Center",0],
   ["C","SCPs and permission boundaries",0],["C","Workload identity: IRSA and OIDC for CI",0],
-  ["B","Multi-agency RBAC design (CorenetX)",1],["B","KMS key management with rotation",0],
+  ["B","Multi-tenant RBAC design",1],["B","KMS key management with rotation",0],
   ["A","Zero-trust access design for an org",0],["A","Detect and contain a leaked credential",0],
   ["S","Own identity architecture",0],["S","Define org-wide IAM standards",0]]},
  {id:"k8s",sig:"K8",name:"Kubernetes Security",sub:"Cluster, workload, supply chain",nodes:[
@@ -388,7 +388,7 @@ const TREES=[
   ["S","Own Kubernetes security for a production fleet",0],["S","Write-up on Kubernetes attack paths",0]]},
  {id:"aisec",sig:"AI",name:"AI Security",sub:"LLM apps, agents, guardrails",nodes:[
   ["E","LLM basics: tokens, context, RAG",1],["E","OWASP Top 10 for LLM applications",1],
-  ["D","Build a RAG app (Vulnerability Advisory)",1],["D","Grounding gate: cite only retrieved docs",1],
+  ["D","Build a RAG app",1],["D","Grounding gate: cite only retrieved docs",1],
   ["C","Prompt-injection test suite against your app",0],["C","Input and output guardrails",0],
   ["B","Safety and quality evals in CI",0],["B","Least-privilege tools for agents",0],
   ["A","AI threat model adopted at work",0],["A","Security review of a production AI system",0],
@@ -396,14 +396,14 @@ const TREES=[
  {id:"influence",sig:"IN",name:"Influence & Executive Presence",sub:"Answer first, outcome before detail",nodes:[
   ["E","90-second About Me, recorded",1],["E","60-second current-project pitch, answer first",0],["E","Pause rule: one breath before every answer",0],
   ["D","8 STAR stories written and timed",1],["D","Recorded mock interview, reviewed",1],["D","10 recorded answers under 90 seconds, outcome first",0],
-  ["C","Lead a team of 6–10 engineers",1],["C","4 weeks of updates in what / so what / now what",0],["C","Publish one technical blog post",0],
-  ["B","Win a cross-team decision (fee engine)",1],["B","Explain a security risk as business risk to a non-engineer",0],["B","VP or CTO mock with no filler openings",0],["B","10-minute meetup talk",0],
+  ["C","Lead a team of engineers",1],["C","4 weeks of updates in what / so what / now what",0],["C","Publish one technical blog post",0],
+  ["B","Win a cross-team decision",1],["B","Explain a security risk as business risk to a non-engineer",0],["B","VP or CTO mock with no filler openings",0],["B","10-minute meetup talk",0],
   ["A","Present to executives or regulators",0],["A","One-page decision memo that gets approved",0],["A","Mentor 2 engineers to promotion",0],
   ["S","Conference talk",0],["S","Recognised hiring bar-raiser",0]]},
  {id:"design",sig:"SD",name:"System Design",sub:"Trade-offs, scale, reliability",nodes:[
   ["E","Building blocks: load balancer, cache, queue, DB, CDN",1],["E","Back-of-envelope estimation",1],
   ["D","Explain 5 classic designs aloud",1],["D","Consistency, replication, partitioning trade-offs",1],
-  ["C","Design in 45 minutes aloud, recorded",0],["C","Design doc with alternatives (fee engine)",1],
+  ["C","Design in 45 minutes aloud, recorded",0],["C","Design doc with alternatives",1],
   ["B","Pass a mock with a senior interviewer",0],["B","Design a secure multi-tenant SaaS end to end",0],
   ["A","Pass a real senior or lead design round",0],["A","Lead a design review that changed the decision",0],
   ["S","Set architecture direction across teams",0],["S","Publish a design write-up others reference",0]]},
@@ -467,7 +467,7 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
 function defaults(){
   const done={};TREES.forEach(t=>t.nodes.forEach((n,i)=>{if(n[2])done[t.id+"-"+i]=true}));
-  return normalize({v:2,name:"Peru",cls:"Cloud Security Engineer · CISSP · CKA",done,active:["devsecops","threat","influence"],log:[],notes:{},journal:[],updatedAt:0},true);
+  return normalize({v:2,name:"Peru",cls:"Cloud Security Engineer",done,active:["devsecops","threat","influence"],log:[],notes:{},journal:[],updatedAt:0},true);
 }
 function normalize(o,raw){
   const base=raw?{}:defaults();
