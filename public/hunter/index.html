@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://api.github.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
 <title>Hunter System</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex, nofollow">
@@ -197,7 +199,7 @@ body.mode-locked main,body.mode-locked .foot,body.mode-locked .top-r{display:non
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+<script src="marked.min.js"></script>
 <style>html,body{margin:0}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
 <body>
@@ -224,7 +226,7 @@ body.mode-locked main,body.mode-locked .foot,body.mode-locked .top-r{display:non
       <ol style="margin-top:12px">
         <li>On GitHub, create a new <b>private</b> repo named <span class="mono">hunter-data</span>.</li>
         <li>Upload <span class="mono">codex.md</span> to it (or paste it into the Codex section after unlocking).</li>
-        <li>Settings → Developer settings → Fine-grained tokens → Generate. Repository access: only <span class="mono">hunter-data</span> (add <span class="mono">portfolio</span> too if you want to publish a public view). Permissions: Contents, read and write. Choose an expiry.</li>
+        <li>Settings → Developer settings → Fine-grained tokens → Generate. Repository access: only <span class="mono">hunter-data</span>. Permissions: Contents, read and write. Expiry: 90 days.</li>
         <li>Paste the token above. It's kept in this browser only. Press Lock on shared computers.</li>
       </ol>
     </details>
@@ -309,6 +311,7 @@ body.mode-locked main,body.mode-locked .foot,body.mode-locked .top-r{display:non
             <div class="fields">
               <label for="pubRepo">Portfolio repo<input id="pubRepo" type="text" spellcheck="false"></label>
               <label for="pubPath">File path<input id="pubPath" type="text" spellcheck="false"></label>
+              <label for="pubToken">One-time key for the portfolio repo (used once, never stored)<input id="pubToken" type="password" spellcheck="false" autocomplete="off"></label>
             </div>
             <div class="row"><button class="btn primary" type="button" id="btnPublish">Publish public view</button><button class="btn" type="button" id="btnPreview">Preview public view</button></div>
           </div>
@@ -481,6 +484,7 @@ function normalize(o,raw){
 let cfg=Object.assign({repo:"perugoal2/hunter-data",path:"save.json",codexPath:"codex.md",token:"",pubRepo:"perugoal2/portfolio",pubPath:"public/hunter/public.json",local:false},parse(store.get(CFG_KEY))||{});
 const saveCfg=()=>store.set(CFG_KEY,JSON.stringify(cfg));
 let S=(()=>{const o=parse(store.get(DATA_KEY))||parse(store.get(OLD_KEY));return o?normalize(o):defaults()})();
+let editingJ=null;
 let mode="locked",preview=false,remoteSha=null,codexSha=null,codexText="",pushTimer=null,showAllNotes=false,publicData=null;
 const openTrees=new Set(S.active),openNotes=new Set();
 const isPublic=()=>mode==="showcase"||preview;
@@ -612,7 +616,9 @@ function renderJournal(){
   const sel=$("jTree"),cur=sel.value;
   sel.innerHTML=`<option value="">No skill tree</option>`+TREES.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join("");sel.value=cur||"";
   const list=S.journal.slice().reverse(),shown=showAllNotes?list:list.slice(0,15);
-  $("jList").innerHTML=shown.length?shown.map(j=>`<li><div class="row" style="justify-content:space-between"><span class="lbl" style="letter-spacing:.14em">${esc(j.t)}${j.tree?" · "+esc(treeName(j.tree)):""}</span><button class="x" type="button" data-jdel="${j.id}" aria-label="Delete note">×</button></div><div class="jtext">${esc(j.text)}</div></li>`).join(""):`<li class="dim">No notes yet. Write one line after each study block: what you did and what tripped you up.</li>`;
+  $("jList").innerHTML=shown.length?shown.map(j=>{const ed=editingJ===j.id;
+    return`<li><div class="row" style="justify-content:space-between"><span class="lbl" style="letter-spacing:.14em">${esc(j.t)}${j.tree?" · "+esc(treeName(j.tree)):""}${j.edited?" · edited "+esc(j.edited):""}</span><span class="row" style="gap:4px">${ed?"":`<button class="ib" type="button" data-jedit="${j.id}">Edit</button>`}<button class="x" type="button" data-jdel="${j.id}" aria-label="Delete note">×</button></span></div>
+    ${ed?`<div class="set" style="margin-top:6px"><textarea id="je-${j.id}" rows="4" aria-label="Edit note">${esc(j.text)}</textarea><div class="row"><button class="btn sm primary" type="button" data-jsave="${j.id}">Save</button><button class="btn sm" type="button" data-jcancel="1">Cancel</button></div></div>`:`<div class="jtext">${esc(j.text)}</div>`}</li>`}).join(""):`<li class="dim">No notes yet. Write one line after each study block: what you did and what tripped you up.</li>`;
   $("jMore").hidden=list.length<=15;$("jMore").textContent=showAllNotes?"Show fewer":"Show all "+list.length+" notes";
 }
 function renderCodex(){
@@ -653,6 +659,10 @@ document.addEventListener("click",e=>{
     const txt=`Brief me: "${n[1]}" (${tr.name}, ${n[0]}-rank). What it is, why it matters, steps, done when, time, resources, interview line.`;
     try{navigator.clipboard.writeText(txt).then(()=>toast("Copied. Paste it to Claude."),()=>toast(txt))}catch(err){toast(txt)}return}
   const b=t.closest("[data-boss]");if(b){const s=S.bosses[b.dataset.boss];s.done=!s.done;commit();renderStatus();renderBosses();if(s.done)toast("Boss cleared: +500 XP");return}
+  const je=t.closest("[data-jedit]");if(je){editingJ=je.dataset.jedit;renderJournal();const ta=$("je-"+editingJ);if(ta){ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)}return}
+  if(t.closest("[data-jcancel]")){editingJ=null;renderJournal();return}
+  const js=t.closest("[data-jsave]");if(js){const j=S.journal.find(x=>x.id===js.dataset.jsave),ta=$("je-"+js.dataset.jsave);
+    if(j&&ta){const v=ta.value.trim();if(!v){toast("A note can't be empty. Delete it instead.");return}j.text=v;j.edited=today();commit()}editingJ=null;renderJournal();toast("Note updated");return}
   const jd=t.closest("[data-jdel]");if(jd){if(jd.dataset.arm!=="1"){jd.dataset.arm="1";jd.textContent="Delete?";setTimeout(()=>{if(jd.isConnected){jd.dataset.arm="";jd.textContent="×"}},3000);return}
     S.journal=S.journal.filter(j=>j.id!==jd.dataset.jdel);commit();renderJournal();return}
 });
@@ -679,11 +689,14 @@ let resetArm=false;
 $("btnReset").addEventListener("click",e=>{if(!resetArm){resetArm=true;e.target.textContent="Press again to reset";setTimeout(()=>{resetArm=false;e.target.textContent="Reset progress"},3000);return}
   resetArm=false;e.target.textContent="Reset progress";S=defaults();commit();renderAll();toast("Progress reset")});
 $("btnPublish").addEventListener("click",async()=>{
-  if(mode!=="sync"){toast("Unlock with an access key first.");return}
+  const once=$("pubToken").value.trim();
+  if(!once){toast("Paste a one-time key with access to the portfolio repo.");$("pubToken").focus();return}
   setSync("Publishing public view…");
+  const saved=cfg.token;cfg.token=once;
   try{let sha=null;try{const f=await getFile(cfg.pubRepo,cfg.pubPath);sha=f?f.sha:null}catch(e){}
     await putText(cfg.pubRepo,cfg.pubPath,JSON.stringify(toPublic()),sha,"hunter: update public view");setSync("Public view published "+hhmm());toast("Published. Live after the site redeploys.")}
-  catch(e){setSync("Couldn't publish. "+e.message+" Add the portfolio repo to the access key.",true)}
+  catch(e){setSync("Couldn't publish. "+e.message,true)}
+  finally{cfg.token=saved;$("pubToken").value=""}
 });
 $("btnPreview").addEventListener("click",()=>{preview=true;renderAll();window.scrollTo(0,0)});
 $("btnEndPreview").addEventListener("click",()=>{preview=false;renderAll()});

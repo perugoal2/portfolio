@@ -182,7 +182,16 @@ export function Layout({ title, description, children }: LayoutProps) {
             {/* legal bar */}
             <div className="mt-8 flex flex-col gap-1 border-t border-line pt-4 pb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-bone-faint sm:flex-row sm:justify-between">
               <span>© {new Date().getFullYear()} {siteProfile.name}. All rights reserved.</span>
-              <span>Built with Next.js &amp; Tailwind</span>
+              <span>
+                Built with Next.js &amp; Tailwind
+                <a
+                  href="/hunter/"
+                  aria-label="Hunter System"
+                  className="ml-2 inline-block px-1 text-bone-faint/40 transition hover:text-signal focus-visible:text-signal"
+                >
+                  §
+                </a>
+              </span>
             </div>
           </footer>
         </div>
