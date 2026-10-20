@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hunter System</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: "The Blueprint Table" from the portfolio's DESIGN.md — status sheet, quests, rank ladders,
+   field notes, codex. Single dark theme by design (matches the portfolio). Violet is signal only. */
+:root{
+  --ink:#0b0a0d; --ink-2:#100e12; --panel:rgba(22,20,26,.62); --panel-solid:#16141a; --panel-2:#1c1a21;
+  --bone:#f7f5f1; --bone-dim:#ddd9d2; --bone-faint:#a69e91;
+  --signal:#8b5cff; --signal-soft:#c4b2ff; --signal-deep:#5a2fce; --signal-deep-h:#6a3fe8; --signal-wash:rgba(139,92,255,.08);
+  --line:rgba(236,231,221,.10); --line-strong:rgba(236,231,221,.18);
+  --grid-fine:rgba(196,178,255,.04); --grid-bold:rgba(196,178,255,.07); --heat0:rgba(236,231,221,.06);
+  --display:"Fraunces", Georgia, serif;
+  --body:"Archivo", ui-sans-serif, system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background-color:var(--ink);color:var(--bone-dim);font-family:var(--body);font-size:16px;line-height:1.6;
+  background-image:linear-gradient(var(--grid-bold) 1px,transparent 1px),linear-gradient(90deg,var(--grid-bold) 1px,transparent 1px),linear-gradient(var(--grid-fine) 1px,transparent 1px),linear-gradient(90deg,var(--grid-fine) 1px,transparent 1px);
+  background-size:120px 120px,120px 120px,24px 24px,24px 24px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--ink)}
+h1,h2,h3{font-family:var(--display);color:var(--bone);margin:0;font-weight:500;letter-spacing:-.02em;text-wrap:balance;line-height:1.05}
+h2{font-size:clamp(1.45rem,2.6vw,1.9rem)}
+em.sig{font-style:italic;color:var(--signal)}
+a{color:var(--signal-soft)}
+button{font:inherit;color:inherit;cursor:pointer;border-radius:0}
+input,textarea,select{font:inherit;color:var(--bone);background:var(--ink-2);border:1px solid var(--line-strong);border-radius:0;padding:8px 10px;width:100%}
+textarea{resize:vertical;line-height:1.5}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.lbl{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bone-faint);font-weight:500}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.dim{color:var(--bone-faint)}
+.shell{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 80px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:14px;border-bottom:1px solid var(--line);background:rgba(11,10,13,.88);backdrop-filter:blur(8px)}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand b{font-family:var(--display);font-weight:600;font-size:1.25rem;color:var(--bone)}
+.brand b span{color:var(--signal)}
+.top-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#sync{max-width:46ch}
+#sync.err{color:var(--signal-soft)}
+#sync.err::before{content:"! ";color:var(--signal)}
+
+main{display:grid;gap:56px;padding-top:36px}
+.sh{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.sh .hint{margin-left:auto;letter-spacing:.08em;text-transform:none;font-family:var(--body);font-size:.85rem}
+
+.btn{background:transparent;border:1px solid var(--line-strong);color:var(--bone);padding:.6rem 1rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;transition:border-color .15s,background .15s,transform .15s}
+.btn:hover{border-color:var(--signal);background:var(--signal-wash)}
+.btn.primary{background:var(--signal-deep);border-color:var(--signal-soft);color:#f6f3ff}
+.btn.primary:hover{background:var(--signal-deep-h);transform:translateY(-1px);box-shadow:0 10px 30px -12px rgba(139,92,255,.65)}
+.btn.sm{padding:.35rem .6rem;font-size:.64rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.panel{background:var(--panel);border:1px solid var(--line);padding:18px 20px;min-width:0}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--line);padding:2px 8px;color:var(--bone-dim);vertical-align:middle}
+.chip::before{content:"";width:6px;height:6px;background:var(--signal)}
+
+/* status */
+.status{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:center}
+.lvbox{width:128px;height:128px;border:1px solid var(--line-strong);display:grid;place-items:center;text-align:center;position:relative;background:var(--panel)}
+.lvbox::before,.lvbox::after{content:"";position:absolute;width:10px;height:10px;border-color:var(--signal);border-style:solid}
+.lvbox::before{top:-1px;left:-1px;border-width:1px 0 0 1px}
+.lvbox::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0}
+.lvbox b{display:block;font-family:var(--display);font-weight:400;font-size:3.6rem;line-height:1;color:var(--bone)}
+.p-main{display:grid;gap:10px;min-width:0}
+.p-main h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:400;line-height:.98}
+.xpbar{height:6px;border:1px solid var(--line-strong);background:var(--ink-2)}
+.xpbar i{display:block;height:100%;background:var(--signal);transition:width .4s}
+.stats{display:flex;gap:6px 26px;flex-wrap:wrap}
+.stats div{display:grid}
+.stats b{font-family:var(--mono);font-weight:500;color:var(--bone);font-size:1rem}
+.penalty{border:1px solid var(--signal);background:var(--signal-wash);color:var(--bone);padding:10px 14px}
+
+/* quests */
+.quests{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.q{display:grid;gap:4px;text-align:left;padding:14px;background:var(--panel);border:1px solid var(--line);transition:border-color .15s,background .15s}
+.q:hover{border-color:var(--signal);background:var(--signal-wash)}
+.q:active{transform:translateY(1px)}
+.q .qx{font-family:var(--mono);font-size:.74rem;color:var(--signal-soft)}
+.q .qn{color:var(--bone);font-size:.93rem;line-height:1.35}
+.twocol{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.loglist{list-style:none;margin:0;padding:0;display:grid;max-height:240px;overflow:auto}
+.loglist li{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.loglist li:last-child{border-bottom:0}
+.x{background:none;border:0;color:var(--bone-faint);padding:0 4px;font-family:var(--mono)}
+.x:hover{color:var(--signal-soft)}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,12px);grid-auto-columns:12px;gap:3px;overflow-x:auto;padding-bottom:4px;margin-top:10px}
+.heat i{background:var(--heat0)}
+.legend{display:flex;gap:4px;align-items:center;margin-top:8px}
+.legend i{width:10px;height:10px;display:inline-block}
+
+/* trees */
+.trees{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;align-items:start}
+.tree{background:var(--panel);border:1px solid var(--line);min-width:0}
+.tree:hover{border-color:var(--line-strong)}
+.tree.active{border-color:var(--line-strong);box-shadow:inset 2px 0 0 var(--signal)}
+.tree>summary{list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px;cursor:pointer}
+.tree>summary::-webkit-details-marker{display:none}
+.sigl{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--bone-faint);border:1px solid var(--line-strong);width:40px;height:40px;display:grid;place-items:center}
+.tree.active .sigl{color:var(--signal-soft);border-color:var(--signal)}
+.t-name{font-family:var(--display);font-size:1.15rem;color:var(--bone);line-height:1.2}
+.t-sub{font-size:.82rem;color:var(--bone-faint);margin-top:2px}
+.pips{display:flex;gap:3px;margin-top:8px}
+.pips i{width:9px;height:9px;border:1px solid var(--line-strong)}
+.pips i.on{background:var(--bone-faint);border-color:var(--bone-faint)}
+.pips i.cur{background:var(--signal);border-color:var(--signal)}
+.rank{text-align:center;min-width:44px}
+.rank b{display:block;font-family:var(--display);font-weight:400;font-size:2rem;line-height:1;color:var(--bone)}
+.rank.none b{color:var(--bone-faint)}
+.tree-body{padding:0 16px 16px;display:grid;gap:12px}
+.tier{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px}
+.tier-l{font-family:var(--mono);font-size:.8rem;color:var(--bone-faint);padding-top:8px;text-align:center}
+.tier-l.cur{color:var(--signal)}
+.nodes{display:grid;gap:4px}
+.node{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:start;padding:7px 9px;background:var(--ink-2);border:1px solid transparent}
+.node:hover{border-color:var(--line)}
+.node input[type=checkbox]{width:16px;height:16px;margin:3px 0 0;accent-color:var(--signal);padding:0}
+.node label{font-size:.9rem;color:var(--bone-dim);cursor:pointer;line-height:1.4}
+.node.done label{color:var(--bone-faint);text-decoration:line-through;text-decoration-color:var(--line-strong)}
+.nside{display:flex;gap:6px;align-items:center}
+.nx{font-family:var(--mono);font-size:.68rem;color:var(--bone-faint)}
+.ib{background:none;border:1px solid var(--line);font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bone-faint);padding:2px 6px}
+.ib:hover{border-color:var(--signal);color:var(--bone)}
+.ib.on{border-color:var(--signal);color:var(--signal-soft)}
+.nnote{grid-column:1/-1;min-height:70px;font-size:.85rem}
+.tree-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* bosses */
+.bosses{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.boss{background:var(--panel);border:1px solid var(--line);padding:16px;display:grid;gap:10px;align-content:start}
+.boss.done{opacity:.7}
+.boss .bn{font-family:var(--display);font-size:1.1rem;color:var(--bone);line-height:1.25}
+.boss input.bname{font-family:var(--display);font-size:1.05rem;padding:4px 6px}
+.boss input[type=date]{font-family:var(--mono);font-size:.82rem;padding:4px 6px;width:auto}
+
+/* notes */
+.jform{display:grid;gap:10px}
+.jform .row select{width:auto;min-width:0;flex:1 1 200px}
+.jlist{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+.jlist li{border-left:1px solid var(--line-strong);padding:4px 0 4px 14px}
+.jlist li:hover{border-left-color:var(--signal)}
+.jtext{white-space:pre-wrap;color:var(--bone-dim);overflow-wrap:anywhere}
+
+/* codex */
+.codex{display:grid;gap:8px}
+.cx{background:var(--panel);border:1px solid var(--line)}
+.cx>summary{cursor:pointer;padding:14px 16px;font-family:var(--display);font-size:1.15rem;color:var(--bone);list-style:none;display:flex;gap:12px;align-items:baseline}
+.cx>summary::-webkit-details-marker{display:none}
+.cx>summary .lbl{min-width:3ch}
+.md{padding:0 16px 16px;max-width:75ch;min-width:0}
+.md h3{font-size:1.05rem;margin:18px 0 6px}
+.md p,.md ul,.md ol{margin:0 0 10px}
+.md li{margin-bottom:4px}
+.md strong{color:var(--bone);font-weight:600}
+.md blockquote{margin:0 0 12px;padding:6px 14px;border-left:2px solid var(--signal);color:var(--bone);background:var(--ink-2)}
+.md blockquote p{margin:4px 0}
+.md code{font-family:var(--mono);font-size:.85em;color:var(--signal-soft)}
+.md table{display:block;overflow-x:auto;border-collapse:collapse;margin:0 0 12px;font-size:.88rem}
+.md th,.md td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+.md th{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--bone-faint);font-weight:500}
+#codexEditor{min-height:300px;font-family:var(--mono);font-size:.8rem}
+
+/* settings */
+.set{display:grid;gap:14px}
+.set label{display:grid;gap:5px;font-size:.85rem;color:var(--bone-faint)}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+#ioBox{min-height:100px;font-family:var(--mono);font-size:.72rem}
+
+/* gate */
+.gate{max-width:560px;margin:10vh auto 0;display:grid;gap:18px}
+.gate h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:400}
+.gate ol{margin:0;padding-left:20px;display:grid;gap:6px;font-size:.92rem}
+.gate .err{color:var(--signal-soft);min-height:1.4em}
+.foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--signal-deep);border:1px solid var(--signal-soft);color:#f6f3ff;font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;padding:10px 16px;z-index:50;max-width:calc(100% - 32px)}
+
+body.view-public .owner{display:none!important}
+body.mode-locked main,body.mode-locked .foot,body.mode-locked .top-r{display:none!important}
+
+@media (max-width:680px){
+  .status{grid-template-columns:1fr}
+  .lvbox{width:96px;height:96px}
+  .lvbox b{font-size:2.6rem}
+  .twocol,.trees{grid-template-columns:minmax(0,1fr)}
+  .node{grid-template-columns:auto minmax(0,1fr)}
+  .nside{grid-column:2;justify-content:flex-start}
+  .sh .hint{margin-left:0;flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+<style>html,body{margin:0}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+
+
+<div class="shell">
+  <header class="top">
+    <div class="brand"><b>Peru<span>.</span>N</b><span class="lbl">Hunter System</span></div>
+    <div class="top-r"><span id="sync" class="lbl" role="status"></span><button class="btn sm owner" id="btnLock" type="button">Lock</button></div>
+  </header>
+
+  <section class="gate" id="gate" hidden>
+    <span class="lbl">§ Restricted · owner access</span>
+    <h1>Enter your <em class="sig">access</em> key</h1>
+    <p class="dim" style="margin:0">Progress, notes and the codex are stored in your private GitHub repo. This page holds none of them.</p>
+    <form id="gateForm" class="set" autocomplete="off">
+      <label for="gRepo">Private repo (owner/name)<input id="gRepo" type="text" spellcheck="false" value="perugoal2/hunter-data"></label>
+      <label for="gToken">Access key (GitHub fine-grained token)<input id="gToken" type="password" spellcheck="false" autocomplete="off"></label>
+      <div class="err" id="gErr" role="alert"></div>
+      <div class="row"><button class="btn primary" type="submit" id="gGo">Unlock</button><button class="btn" type="button" id="gLocal">Use on this device only</button><button class="btn" type="button" id="gBack" hidden>Back to public view</button></div>
+    </form>
+    <details class="panel">
+      <summary class="lbl" style="cursor:pointer">First-time setup</summary>
+      <ol style="margin-top:12px">
+        <li>On GitHub, create a new <b>private</b> repo named <span class="mono">hunter-data</span>.</li>
+        <li>Upload <span class="mono">codex.md</span> to it (or paste it into the Codex section after unlocking).</li>
+        <li>Settings → Developer settings → Fine-grained tokens → Generate. Repository access: only <span class="mono">hunter-data</span> (add <span class="mono">portfolio</span> too if you want to publish a public view). Permissions: Contents, read and write. Choose an expiry.</li>
+        <li>Paste the token above. It's kept in this browser only. Press Lock on shared computers.</li>
+      </ol>
+    </details>
+  </section>
+
+  <main id="main">
+    <section aria-labelledby="h1">
+      <div class="sh"><span class="lbl">§01 Status</span></div>
+      <div class="status">
+        <div class="lvbox"><div><span class="lbl">Level</span><b id="lvl">1</b></div></div>
+        <div class="p-main">
+          <h1 id="h1"><span id="pname">Peru</span>, <em class="sig" id="prank">E-Rank</em> <span id="ptitle">Hunter</span></h1>
+          <div id="pclass"></div>
+          <div class="xpbar" aria-hidden="true"><i id="xpfill"></i></div>
+          <div class="stats">
+            <div><span class="lbl">XP</span><b id="xpnow"></b></div>
+            <div><span class="lbl">Streak</span><b id="streak"></b></div>
+            <div><span class="lbl">Nodes</span><b id="nodes"></b></div>
+            <div class="owner"><span class="lbl">Today</span><b id="todayxp"></b></div>
+          </div>
+          <div class="penalty owner" id="penalty" hidden>Penalty zone: you missed the last two days. Today starts with a 20-minute minimum block.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="owner" aria-labelledby="qh">
+      <div class="sh"><span class="lbl">§02</span><h2 id="qh">Daily quests</h2><span class="lbl hint">XP only for proof. Nothing for watching or reading.</span></div>
+      <div class="quests" id="quests"></div>
+    </section>
+
+    <section class="twocol" aria-label="Activity">
+      <div class="panel owner"><span class="lbl">Today's log</span><ul class="loglist" id="log" style="margin-top:8px"></ul></div>
+      <div class="panel"><span class="lbl">Last 16 weeks</span><div class="heat" id="heat" role="img" aria-label="Daily XP heatmap"></div>
+        <div class="legend dim" style="font-size:.75rem"><span>Less</span><i data-l="0"></i><i data-l="1"></i><i data-l="2"></i><i data-l="3"></i><i data-l="4"></i><span>More</span></div></div>
+    </section>
+
+    <section aria-labelledby="th">
+      <div class="sh"><span class="lbl">§03</span><h2 id="th">Skill trees</h2><span class="lbl hint">A tree's rank is the highest rank with every node cleared.</span></div>
+      <div class="trees" id="trees"></div>
+    </section>
+
+    <section aria-labelledby="bh">
+      <div class="sh"><span class="lbl">§04</span><h2 id="bh">Boss fights</h2><span class="lbl hint">+500 XP each</span></div>
+      <div class="bosses" id="bosses"></div>
+    </section>
+
+    <section class="owner" aria-labelledby="nh">
+      <div class="sh"><span class="lbl">§05</span><h2 id="nh">Field notes</h2><span class="lbl hint">What you learned, links, interview lessons</span></div>
+      <div class="panel">
+        <form class="jform" id="jForm">
+          <label for="jText" class="lbl">New note</label>
+          <textarea id="jText" rows="3" placeholder="e.g. NetworkPolicy default-deny broke DNS until I allowed egress to kube-dns on 53"></textarea>
+          <div class="row"><select id="jTree" aria-label="Skill tree"></select><button class="btn primary" type="submit">Add note</button></div>
+        </form>
+        <ul class="jlist" id="jList"></ul>
+        <div class="row" style="margin-top:10px"><button class="btn sm" type="button" id="jMore" hidden>Show all notes</button></div>
+      </div>
+    </section>
+
+    <section class="owner" aria-labelledby="ch">
+      <div class="sh"><span class="lbl">§06</span><h2 id="ch">Codex</h2><span class="lbl hint">Your guides and plans, stored as codex.md in your private repo</span></div>
+      <div class="codex" id="codexView"></div>
+      <div class="row" style="margin-top:12px"><button class="btn sm" type="button" id="cxEdit">Edit codex</button></div>
+      <div id="cxEditWrap" class="set" style="margin-top:12px" hidden>
+        <label for="codexEditor">Markdown. Each "## " heading becomes a section.<textarea id="codexEditor" spellcheck="false"></textarea></label>
+        <div class="row"><button class="btn primary" type="button" id="cxSave">Save codex</button><button class="btn" type="button" id="cxCancel">Cancel</button></div>
+      </div>
+    </section>
+
+    <section class="owner" aria-labelledby="sth">
+      <div class="sh"><span class="lbl">§07</span><h2 id="sth">Settings</h2></div>
+      <div class="panel set">
+        <div class="fields">
+          <label for="inName">Hunter name<input id="inName" type="text"></label>
+          <label for="inClass">Class<input id="inClass" type="text"></label>
+        </div>
+        <div class="row"><span class="lbl">Storage</span><span id="storeInfo" class="dim" style="font-size:.88rem"></span></div>
+        <details>
+          <summary class="lbl" style="cursor:pointer">Public view on your portfolio</summary>
+          <div class="set" style="margin-top:12px">
+            <p class="dim" style="margin:0;font-size:.88rem">Publishes ranks, boss fights and the XP heatmap to a public file next to this page. Notes, the log and the codex are never published. Visitors see it after your site redeploys.</p>
+            <div class="fields">
+              <label for="pubRepo">Portfolio repo<input id="pubRepo" type="text" spellcheck="false"></label>
+              <label for="pubPath">File path<input id="pubPath" type="text" spellcheck="false"></label>
+            </div>
+            <div class="row"><button class="btn primary" type="button" id="btnPublish">Publish public view</button><button class="btn" type="button" id="btnPreview">Preview public view</button></div>
+          </div>
+        </details>
+        <details>
+          <summary class="lbl" style="cursor:pointer">Backup and reset</summary>
+          <div class="set" style="margin-top:12px">
+            <label for="ioBox">Save data<textarea id="ioBox" spellcheck="false"></textarea></label>
+            <div class="row"><button class="btn" type="button" id="btnExport">Show and copy save</button><button class="btn" type="button" id="btnImport">Import pasted save</button><button class="btn" type="button" id="btnReset">Reset progress</button></div>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span class="lbl" id="footNote">Progress is tracked by proof</span>
+    <button class="btn sm" type="button" id="btnOwner" hidden>Owner access</button>
+    <button class="btn sm" type="button" id="btnEndPreview" hidden>End preview</button>
+  </footer>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+const RANKS=["E","D","C","B","A","S"];
+const RXP={E:20,D:40,C:60,B:100,A:150,S:250};
+const LEVEL_XP=500;
+const DATA_KEY="hunter-system-v2",OLD_KEY="hunter-system-v1",CFG_KEY="hunter-cfg-v1",PEND_KEY="hunter-pending",CODEX_KEY="hunter-codex";
+
+// [rank, milestone, done-by-default]
+const TREES=[
+ {id:"cloud",sig:"CL",name:"Cloud & DevOps",sub:"AWS, Terraform, CI/CD, platforms",nodes:[
+  ["E","AWS core: IAM, VPC, EC2, S3",1],["E","Linux and networking fundamentals",1],
+  ["D","Terraform a VPC with modules and remote state",1],["D","Minimal multi-stage Docker images",1],
+  ["C","CI/CD pipeline deploying to Kubernetes",1],["C","Metrics, logs and alerts for a service",1],
+  ["B","Multi-account AWS with Organizations and SCPs",0],["B","GitOps with Argo CD or Flux",0],
+  ["A","Run production at scale (1,000+ clusters, Viasat)",1],["A","Hold an SLA with on-call and postmortems",1],
+  ["S","Platform lead owning the roadmap",0],["S","Org-wide cost and reliability programme",0]]},
+ {id:"devsecops",sig:"DS",name:"DevSecOps",sub:"Secure pipelines and supply chain",nodes:[
+  ["E","Explain the OWASP Top 10 with examples",1],["E","Secure code review basics",1],
+  ["D","SAST and secret scanning in CI (Semgrep, gitleaks)",1],["D","Dependency scanning with a merge gate",1],
+  ["C","DAST in the pipeline (OWASP ZAP)",0],["C","IaC scanning with Checkov and Trivy (IaC reviewer)",1],
+  ["B","SBOM and build provenance (SLSA level 2)",0],["B","AI code review in CI on every merge request",1],
+  ["A","Auto-remediation pipeline for cloud findings",0],["A","Security metrics: MTTR and coverage dashboard",0],
+  ["S","Own the secure SDLC for an organisation",0],["S","Run a security champions programme",0]]},
+ {id:"defense",sig:"DR",name:"Detection & Response",sub:"Blue team, logs, incidents",nodes:[
+  ["E","Know the log sources: CloudTrail, VPC Flow, K8s audit",1],["E","Incident response lifecycle (NIST 800-61)",1],
+  ["D","GuardDuty and Security Hub enabled and triaged",0],["D","Write 5 detection queries (Athena or OpenSearch)",0],
+  ["C","Detection as code with tests (Sigma rules)",0],["C","Alert routing with runbooks",0],
+  ["B","Validate detections with Stratus Red Team",0],["B","Automated containment with Lambda",0],
+  ["A","Lead a real incident end to end",0],["A","Detection coverage mapped to MITRE ATT&CK",0],
+  ["S","Detection engineering lead",0],["S","Run a purple-team programme",0]]},
+ {id:"threat",sig:"TM",name:"Threat Modeling",sub:"STRIDE, data flows, risk, controls",nodes:[
+  ["E","STRIDE per element",1],["E","Data-flow diagrams with trust boundaries",1],
+  ["D","Threat model one real feature at work",0],["D","Rate risk: likelihood × impact, CVSS",0],
+  ["C","Map threats to controls (ASVS, CIS, MAS TRM)",0],["C","Attack tree for a payment or approval flow",0],
+  ["B","Ship ThreatForge, the AI threat-model app",0],["B","Threat model a RAG system (OWASP LLM Top 10)",0],
+  ["A","Run a threat-modeling workshop for a team",0],["A","Threat models become a design-review gate",0],
+  ["S","Org-wide threat-modeling programme",0],["S","Talk at an OWASP or CSA meetup",0]]},
+ {id:"iam",sig:"IA",name:"Identity & Access",sub:"AuthN, AuthZ, least privilege",nodes:[
+  ["E","OAuth 2.0 and OIDC flows",1],["E","AWS IAM policy evaluation logic",0],
+  ["D","Least privilege with IAM Access Analyzer",0],["D","SSO with IAM Identity Center",0],
+  ["C","SCPs and permission boundaries",0],["C","Workload identity: IRSA and OIDC for CI",0],
+  ["B","Multi-agency RBAC design (CorenetX)",1],["B","KMS key management with rotation",0],
+  ["A","Zero-trust access design for an org",0],["A","Detect and contain a leaked credential",0],
+  ["S","Own identity architecture",0],["S","Define org-wide IAM standards",0]]},
+ {id:"k8s",sig:"K8",name:"Kubernetes Security",sub:"Cluster, workload, supply chain",nodes:[
+  ["E","CKA certified",1],["E","RBAC and service accounts",1],
+  ["D","Default-deny NetworkPolicies",0],["D","Pod Security Standards (restricted)",0],
+  ["C","Admission policies with Kyverno or Gatekeeper",0],["C","External Secrets backed by KMS",0],
+  ["B","Runtime detection with Falco",0],["B","Image signing with cosign, verified at admission",0],
+  ["A","CKS certified",0],["A","Cluster passes kube-bench (CIS)",0],
+  ["S","Own Kubernetes security for a production fleet",0],["S","Write-up on Kubernetes attack paths",0]]},
+ {id:"aisec",sig:"AI",name:"AI Security",sub:"LLM apps, agents, guardrails",nodes:[
+  ["E","LLM basics: tokens, context, RAG",1],["E","OWASP Top 10 for LLM applications",1],
+  ["D","Build a RAG app (Vulnerability Advisory)",1],["D","Grounding gate: cite only retrieved docs",1],
+  ["C","Prompt-injection test suite against your app",0],["C","Input and output guardrails",0],
+  ["B","Safety and quality evals in CI",0],["B","Least-privilege tools for agents",0],
+  ["A","AI threat model adopted at work",0],["A","Security review of a production AI system",0],
+  ["S","Recognised voice: talks and posts",0],["S","Contribute to an AI security framework or tool",0]]},
+ {id:"influence",sig:"IN",name:"Influence & Executive Presence",sub:"Answer first, outcome before detail",nodes:[
+  ["E","90-second About Me, recorded",1],["E","60-second current-project pitch, answer first",0],["E","Pause rule: one breath before every answer",0],
+  ["D","8 STAR stories written and timed",1],["D","Recorded mock interview, reviewed",1],["D","10 recorded answers under 90 seconds, outcome first",0],
+  ["C","Lead a team of 6–10 engineers",1],["C","4 weeks of updates in what / so what / now what",0],["C","Publish one technical blog post",0],
+  ["B","Win a cross-team decision (fee engine)",1],["B","Explain a security risk as business risk to a non-engineer",0],["B","VP or CTO mock with no filler openings",0],["B","10-minute meetup talk",0],
+  ["A","Present to executives or regulators",0],["A","One-page decision memo that gets approved",0],["A","Mentor 2 engineers to promotion",0],
+  ["S","Conference talk",0],["S","Recognised hiring bar-raiser",0]]},
+ {id:"design",sig:"SD",name:"System Design",sub:"Trade-offs, scale, reliability",nodes:[
+  ["E","Building blocks: load balancer, cache, queue, DB, CDN",1],["E","Back-of-envelope estimation",1],
+  ["D","Explain 5 classic designs aloud",1],["D","Consistency, replication, partitioning trade-offs",1],
+  ["C","Design in 45 minutes aloud, recorded",0],["C","Design doc with alternatives (fee engine)",1],
+  ["B","Pass a mock with a senior interviewer",0],["B","Design a secure multi-tenant SaaS end to end",0],
+  ["A","Pass a real senior or lead design round",0],["A","Lead a design review that changed the decision",0],
+  ["S","Set architecture direction across teams",0],["S","Publish a design write-up others reference",0]]},
+ {id:"code",sig:"CD",name:"Coding",sub:"Python and Go",nodes:[
+  ["E","Python packaging, venvs and typing",1],["E","Debug an unfamiliar codebase",1],
+  ["D","CLI tool with tests",1],["D","Git fluency: rebase, bisect, clean PRs",1],
+  ["C","Tested REST API with CI",1],["C","Build a small CLI in Go",0],
+  ["B","Public repo with docs, a release and 10+ stars",0],["B","Correct concurrency (asyncio or goroutines)",0],
+  ["A","Merged PR to a known OSS security tool",0],["A","Profile and speed up a hot path, with numbers",0],
+  ["S","Maintain a tool others depend on",0],["S","Raise code quality across teams through review",0]]},
+ {id:"algo",sig:"AL",name:"Algorithms",sub:"Maintenance mode: 3 a week",nodes:[
+  ["E","Arrays and hashing (10 problems)",1],["E","Two pointers and sliding window (10)",0],
+  ["D","Stack and binary search (15)",0],["D","Linked lists and trees (15)",0],
+  ["C","Graphs: BFS and DFS (10)",0],["C","Heaps and intervals (10)",0],
+  ["B","NeetCode 150 complete",0],["B","1-D dynamic programming (15)",0],
+  ["A","5 mediums in a row under 25 minutes",0],["A","2-D DP and backtracking (15)",0],
+  ["S","Solve a hard in a live interview",0],["S","Consistent hards in contests",0]]},
+ {id:"offense",sig:"OF",name:"Offensive Security",sub:"Break it to defend it",nodes:[
+  ["E","Web vulnerabilities: XSS, SQLi, SSRF",1],["E","Burp Suite fundamentals",0],
+  ["D","20 PortSwigger Academy labs",0],["D","30 OWASP Juice Shop challenges",0],
+  ["C","10 HackTheBox or TryHackMe machines",0],["C","Cloud attack labs: CloudGoat, flaws.cloud",0],
+  ["B","Kubernetes Goat attack paths",0],["B","Run Stratus Red Team attack techniques",0],
+  ["A","Valid bug bounty finding or CVE",0],["A","Authorised red-team exercise",0],
+  ["S","OSCP-level certification",0],["S","Publish original research",0]]}
+];
+const QUESTS=[
+ {id:"study",n:"Study block, 45 min + a note",xp:10,study:1},
+ {id:"min",n:"Penalty minimum, 20 min",xp:5,study:1},
+ {id:"talk",n:"60-second answer drill, recorded",xp:10,study:1},
+ {id:"exec",n:"Executive rewrite: 3 lines for a CTO",xp:10,study:1},
+ {id:"easy",n:"Algorithm problem, easy",xp:5,study:1},
+ {id:"med",n:"Algorithm problem, medium",xp:10,study:1},
+ {id:"design",n:"System design, aloud and recorded",xp:30,study:1},
+ {id:"vpmock",n:"Mock in a VP or CTO scenario",xp:30,study:1},
+ {id:"lab",n:"Lab done (PortSwigger, HTB, CloudGoat)",xp:15,study:1},
+ {id:"push",n:"Project milestone pushed",xp:50,study:1},
+ {id:"post",n:"Blog or LinkedIn post published",xp:40},
+ {id:"apply",n:"Job application sent",xp:5},
+ {id:"ref",n:"Referral asked",xp:15},
+ {id:"intv",n:"Interview round done",xp:100}
+];
+const BOSSES=[
+ {id:"b1",n:"AWS security project live on GitHub",d:"2026-11-03"},
+ {id:"b2",n:"ThreatForge v1 live",d:"2026-11-17"},
+ {id:"b3",n:"AWS Security Specialty passed",d:"2026-11-20"},
+ {id:"b4",n:"First interview loop",d:"2026-12-04"},
+ {id:"b5",n:"Final boss: the offer",d:"2026-12-31"}
+];
+const TITLES=[[1,"E"],[3,"D"],[5,"C"],[8,"B"],[12,"A"],[17,"S"]];
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const parse=s=>{try{return JSON.parse(s)}catch(e){return null}};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const pad=n=>String(n).padStart(2,"0");
+const dstr=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const today=()=>dstr(new Date());
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const hhmm=()=>{const d=new Date();return pad(d.getHours())+":"+pad(d.getMinutes())};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+function defaults(){
+  const done={};TREES.forEach(t=>t.nodes.forEach((n,i)=>{if(n[2])done[t.id+"-"+i]=true}));
+  return normalize({v:2,name:"Peru",cls:"Cloud Security Engineer · CISSP · CKA",done,active:["devsecops","threat","influence"],log:[],notes:{},journal:[],updatedAt:0},true);
+}
+function normalize(o,raw){
+  const base=raw?{}:defaults();
+  const s=Object.assign(base,o||{});
+  const b={};BOSSES.forEach(x=>{const v=(o&&o.bosses&&o.bosses[x.id])||{};b[x.id]={name:v.name||x.n,date:v.date||x.d,done:!!v.done}});s.bosses=b;
+  s.done=s.done&&typeof s.done==="object"?s.done:{};
+  s.notes=s.notes&&typeof s.notes==="object"?s.notes:{};
+  s.journal=Array.isArray(s.journal)?s.journal:[];
+  s.log=Array.isArray(s.log)?s.log:[];
+  s.active=Array.isArray(s.active)?s.active.slice(0,3):["devsecops","threat","influence"];
+  return s;
+}
+
+let cfg=Object.assign({repo:"perugoal2/hunter-data",path:"save.json",codexPath:"codex.md",token:"",pubRepo:"perugoal2/portfolio",pubPath:"public/hunter/public.json",local:false},parse(store.get(CFG_KEY))||{});
+const saveCfg=()=>store.set(CFG_KEY,JSON.stringify(cfg));
+let S=(()=>{const o=parse(store.get(DATA_KEY))||parse(store.get(OLD_KEY));return o?normalize(o):defaults()})();
+let mode="locked",preview=false,remoteSha=null,codexSha=null,codexText="",pushTimer=null,showAllNotes=false,publicData=null;
+const openTrees=new Set(S.active),openNotes=new Set();
+const isPublic=()=>mode==="showcase"||preview;
+
+/* ---------- GitHub storage ---------- */
+const API="https://api.github.com";
+function b64e(str){const bytes=new TextEncoder().encode(str);let bin="";for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));return btoa(bin)}
+function b64d(b){const bin=atob(String(b).replace(/\s/g,""));const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new TextDecoder().decode(u)}
+function errMsg(s){return s===401?"GitHub rejected the access key. It may be wrong or expired.":s===403?"The access key can't write here. Give it Contents: read and write on this repo.":s===404?"Repo not found, or the access key can't see it.":"GitHub returned error "+s+"."}
+async function gh(method,url,body){
+  let r;try{r=await fetch(API+url,{method,cache:"no-store",headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+cfg.token,"X-GitHub-Api-Version":"2022-11-28"},body:body?JSON.stringify(body):undefined})}
+  catch(e){throw new Error("Couldn't reach GitHub. Check your connection.")}
+  return r;
+}
+const cpath=(repo,path)=>"/repos/"+repo+"/contents/"+path.split("/").map(encodeURIComponent).join("/");
+async function getFile(repo,path){const r=await gh("GET",cpath(repo,path));if(r.status===404)return null;if(!r.ok)throw new Error(errMsg(r.status));const j=await r.json();return{sha:j.sha,text:b64d(j.content)}}
+async function putText(repo,path,text,sha,message){
+  const put=sh=>{const body={message,content:b64e(text)};if(sh)body.sha=sh;return gh("PUT",cpath(repo,path),body)};
+  let r=await put(sha);
+  if(r.status===409||r.status===422){const f=await getFile(repo,path);r=await put(f?f.sha:null)}
+  if(!r.ok)throw new Error(errMsg(r.status));
+  return (await r.json()).content.sha;
+}
+function setSync(msg,err){const el=$("sync");el.textContent=msg;el.classList.toggle("err",!!err)}
+
+async function pull(){
+  setSync("Loading from GitHub…");
+  try{
+    const f=await getFile(cfg.repo,cfg.path);
+    if(!f){remoteSha=null;await push()}
+    else{
+      remoteSha=f.sha;const remote=normalize(parse(f.text)||{});
+      if(store.get(PEND_KEY)&&S.updatedAt>(remote.updatedAt||0))await push();
+      else{S=remote;store.set(DATA_KEY,JSON.stringify(S));store.del(PEND_KEY);setSync("Synced "+hhmm())}
+    }
+  }catch(e){setSync(e.message+" Using this device's copy.",true)}
+  renderAll();loadCodex();
+}
+async function push(){
+  if(mode!=="sync")return;clearTimeout(pushTimer);setSync("Saving…");
+  try{remoteSha=await putText(cfg.repo,cfg.path,JSON.stringify(S,null,1),remoteSha,"progress "+today());store.del(PEND_KEY);setSync("Saved to GitHub "+hhmm())}
+  catch(e){setSync("Not saved to GitHub. "+e.message+" Changes are kept on this device.",true)}
+}
+function commit(){
+  if(isPublic())return;
+  S.updatedAt=Date.now();store.set(DATA_KEY,JSON.stringify(S));
+  if(mode==="sync"){store.set(PEND_KEY,"1");setSync("Unsaved changes…");clearTimeout(pushTimer);pushTimer=setTimeout(push,2500)}
+}
+async function loadCodex(){
+  codexText=store.get(CODEX_KEY)||"";
+  if(mode==="sync"){try{const f=await getFile(cfg.repo,cfg.codexPath);codexSha=f?f.sha:null;if(f){codexText=f.text;store.set(CODEX_KEY,codexText)}}catch(e){}}
+  renderCodex();
+}
+async function saveCodex(text){
+  codexText=text;store.set(CODEX_KEY,text);
+  if(mode==="sync"){setSync("Saving codex…");try{codexSha=await putText(cfg.repo,cfg.codexPath,text,codexSha,"codex "+today());setSync("Codex saved "+hhmm())}catch(e){setSync("Codex not saved to GitHub. "+e.message,true)}}
+  renderCodex();
+}
+
+/* ---------- derived values ---------- */
+const nodeId=(t,i)=>t.id+"-"+i;
+function nodeXP(){let x=0;TREES.forEach(t=>t.nodes.forEach((n,i)=>{if(S.done[nodeId(t,i)])x+=RXP[n[0]]}));return x}
+function bossXP(){return Object.values(S.bosses).filter(b=>b.done).length*500}
+function logXP(){return isPublic()&&publicData&&!preview?(publicData.logXP||0):S.log.reduce((a,l)=>a+l.xp,0)}
+function totalXP(){return logXP()+nodeXP()+bossXP()}
+function dayXP(){if(mode==="showcase"&&!preview&&publicData)return publicData.heat||{};const m={};S.log.forEach(l=>{m[l.t]=(m[l.t]||0)+l.xp});return m}
+function studyDays(){
+  if(mode==="showcase"&&publicData)return new Set(Object.keys(publicData.heat||{}).filter(k=>publicData.heat[k]>0));
+  const s=new Set();S.log.forEach(l=>{const q=QUESTS.find(q=>q.id===l.q);if(q&&q.study)s.add(l.t)});return s;
+}
+function streak(){const s=studyDays();let d=new Date();if(!s.has(dstr(d)))d=addDays(d,-1);let n=0;while(s.has(dstr(d))){n++;d=addDays(d,-1)}return n}
+function inPenalty(){const s=studyDays();if(!s.size)return false;const t=new Date();return[0,1,2].every(k=>!s.has(dstr(addDays(t,-k))))}
+function treeRank(t){let r=-1;for(let i=0;i<RANKS.length;i++){const ok=t.nodes.every((n,j)=>n[0]!==RANKS[i]||S.done[nodeId(t,j)]);if(ok)r=i;else break}return r}
+function rankFor(l){let r="E";TITLES.forEach(([m,n])=>{if(l>=m)r=n});return r}
+function toPublic(){return{name:S.name,cls:S.cls,done:S.done,active:S.active,bosses:S.bosses,heat:dayXP(),logXP:S.log.reduce((a,l)=>a+l.xp,0),updatedAt:Date.now()}}
+
+/* ---------- rendering ---------- */
+let toastT;function toast(m){const el=$("toast");el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2200)}
+function renderStatus(){
+  const xp=totalXP(),lvl=Math.floor(xp/LEVEL_XP)+1,into=xp%LEVEL_XP;
+  $("lvl").textContent=lvl;$("pname").textContent=S.name||"Hunter";$("pclass").textContent=S.cls||"";
+  $("prank").textContent=rankFor(lvl)+"-Rank";$("ptitle").textContent=lvl>=25?"Shadow Architect":"Hunter";
+  $("xpfill").style.width=(into/LEVEL_XP*100)+"%";
+  $("xpnow").textContent=xp.toLocaleString()+" · "+into+"/"+LEVEL_XP;
+  const st=streak();$("streak").textContent=st+(st===1?" day":" days");
+  let c=0,all=0;TREES.forEach(t=>t.nodes.forEach((n,i)=>{all++;if(S.done[nodeId(t,i)])c++}));$("nodes").textContent=c+"/"+all;
+  $("todayxp").textContent=(dayXP()[today()]||0)+" XP";
+  $("penalty").hidden=isPublic()||!inPenalty();
+}
+function renderQuests(){$("quests").innerHTML=QUESTS.map(q=>`<button class="q" type="button" data-q="${q.id}"><span class="qx">+${q.xp} XP</span><span class="qn">${esc(q.n)}</span></button>`).join("")}
+function renderLog(){
+  const items=S.log.filter(l=>l.t===today()).slice().reverse();
+  $("log").innerHTML=items.length?items.map(l=>{const q=QUESTS.find(q=>q.id===l.q);return`<li><span>${esc(q?q.n:l.q)}</span><span><span class="mono" style="color:var(--signal-soft)">+${l.xp}</span> <button class="x" type="button" data-undo="${l.id}" aria-label="Undo">×</button></span></li>`}).join(""):`<li class="dim">Nothing logged yet. Start with one study block.</li>`;
+}
+function heatColor(x){if(!x)return"var(--heat0)";const a=x<15?.28:x<40?.48:x<100?.72:1;return`rgba(139,92,255,${a})`}
+function renderHeat(){
+  const m=dayXP(),end=new Date(),start=addDays(end,-(15*7)-end.getDay());let h="";
+  for(let d=new Date(start);d<=end;d=addDays(d,1)){const k=dstr(d),x=m[k]||0;h+=`<i style="background:${heatColor(x)}" title="${k}: ${x} XP"></i>`}
+  $("heat").innerHTML=h;document.querySelectorAll(".legend i").forEach(i=>i.style.background=heatColor([0,10,30,80,150][+i.dataset.l]));
+}
+function renderTrees(){
+  const pub=isPublic();
+  const order=TREES.slice().sort((a,b)=>(S.active.includes(b.id)?1:0)-(S.active.includes(a.id)?1:0));
+  $("trees").innerHTML=order.map(t=>{
+    const r=treeRank(t),act=S.active.includes(t.id),nextR=RANKS[r+1];
+    let progTxt="Max rank";
+    if(nextR){const ids=t.nodes.map((n,j)=>[n,j]).filter(([n])=>n[0]===nextR);progTxt=`Next ${nextR}: ${ids.filter(([n,j])=>S.done[nodeId(t,j)]).length}/${ids.length}`}
+    const pips=RANKS.map((R,i)=>`<i class="${i<r?"on":i===r?"cur":""}" title="${R}"></i>`).join("");
+    const tiers=RANKS.map((R,ri)=>{const ns=t.nodes.map((n,j)=>[n,j]).filter(([n])=>n[0]===R);
+      return`<div class="tier"><div class="tier-l${ri===r+1?" cur":""}">${R}</div><div class="nodes">${ns.map(([n,j])=>{const id=nodeId(t,j),dn=!!S.done[id],note=S.notes[id]||"",on=openNotes.has(id);
+        return`<div class="node${dn?" done":""}"><input type="checkbox" id="n-${id}" data-node="${id}" ${dn?"checked":""} ${pub?"disabled":""}><label for="n-${id}">${esc(n[1])}</label>
+          <span class="nside"><span class="nx">${RXP[R]}</span><button class="ib owner${note?" on":""}" type="button" data-note="${id}" aria-expanded="${on}">${note?"Note ●":"Note"}</button><button class="ib owner" type="button" data-brief="${id}">Brief</button></span>
+          ${on&&!pub?`<textarea class="nnote" id="nn-${id}" data-notefor="${id}" placeholder="What you did, proof links, what to remember">${esc(note)}</textarea>`:""}</div>`}).join("")}</div></div>`}).join("");
+    return`<details class="tree${act?" active":""}" data-tree="${t.id}" ${openTrees.has(t.id)?"open":""}>
+      <summary><span class="sigl">${t.sig}</span><div style="min-width:0"><div class="t-name">${esc(t.name)} ${act?'<span class="chip">Active</span>':""}</div><div class="t-sub">${esc(t.sub)} · ${progTxt}</div><div class="pips" aria-hidden="true">${pips}</div></div>
+      <div class="rank${r<0?" none":""}"><b>${r<0?"–":RANKS[r]}</b><span class="lbl">Rank</span></div></summary>
+      <div class="tree-body">${tiers}<div class="tree-foot owner"><span class="lbl" style="letter-spacing:.12em">E 20 · D 40 · C 60 · B 100 · A 150 · S 250 XP</span><button class="btn sm" type="button" data-pin="${t.id}">${act?"Unpin":"Pin as active"}</button></div></div></details>`}).join("");
+}
+function daysLeft(d){const n=Math.round((new Date(d+"T00:00")-new Date(today()+"T00:00"))/864e5);return n>0?n+" days left":n===0?"Today":Math.abs(n)+" days overdue"}
+function renderBosses(){
+  const pub=isPublic();
+  $("bosses").innerHTML=BOSSES.map(x=>{const b=S.bosses[x.id];
+    return`<div class="boss${b.done?" done":""}">${pub?`<div class="bn">${esc(b.name)}</div>`:`<label class="lbl" for="bn-${x.id}">Boss</label><input class="bname" id="bn-${x.id}" data-bname="${x.id}" value="${esc(b.name)}">`}
+      <div class="row"><label class="lbl" for="bd-${x.id}">Target</label><input type="date" id="bd-${x.id}" data-bdate="${x.id}" value="${esc(b.date)}" ${pub?"disabled":""}><span class="lbl" style="letter-spacing:.1em">${b.done?"Cleared":daysLeft(b.date)}</span></div>
+      <div class="owner"><button class="btn sm${b.done?"":" primary"}" type="button" data-boss="${x.id}">${b.done?"Mark not cleared":"Mark cleared"}</button></div></div>`}).join("");
+}
+function treeName(id){const t=TREES.find(t=>t.id===id);return t?t.name:""}
+function renderJournal(){
+  const sel=$("jTree"),cur=sel.value;
+  sel.innerHTML=`<option value="">No skill tree</option>`+TREES.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join("");sel.value=cur||"";
+  const list=S.journal.slice().reverse(),shown=showAllNotes?list:list.slice(0,15);
+  $("jList").innerHTML=shown.length?shown.map(j=>`<li><div class="row" style="justify-content:space-between"><span class="lbl" style="letter-spacing:.14em">${esc(j.t)}${j.tree?" · "+esc(treeName(j.tree)):""}</span><button class="x" type="button" data-jdel="${j.id}" aria-label="Delete note">×</button></div><div class="jtext">${esc(j.text)}</div></li>`).join(""):`<li class="dim">No notes yet. Write one line after each study block: what you did and what tripped you up.</li>`;
+  $("jMore").hidden=list.length<=15;$("jMore").textContent=showAllNotes?"Show fewer":"Show all "+list.length+" notes";
+}
+function renderCodex(){
+  const view=$("codexView");
+  if(!codexText.trim()){view.innerHTML=`<div class="panel dim">No codex yet. Choose Edit codex, paste the contents of codex.md and save. It's stored ${mode==="sync"?"in your private repo":"on this device"}, not on this page.</div>`;return}
+  const parts=codexText.split(/^## /m),intro=parts.shift();
+  const md=s=>window.marked&&marked.parse?marked.parse(s):`<pre style="white-space:pre-wrap">${esc(s)}</pre>`;
+  view.innerHTML=parts.map((p,i)=>{const nl=p.indexOf("\n"),head=nl<0?p:p.slice(0,nl),body=nl<0?"":p.slice(nl+1);
+    return`<details class="cx"><summary><span class="lbl">${pad(i+1)}</span><span>${esc(head.trim())}</span></summary><div class="md">${md(body)}</div></details>`}).join("")||`<div class="panel md">${md(intro)}</div>`;
+}
+function renderMode(){
+  document.body.classList.toggle("view-public",isPublic());
+  document.body.classList.toggle("mode-locked",mode==="locked");
+  $("gate").hidden=mode!=="locked";
+  $("main").hidden=mode==="locked";
+  $("btnOwner").hidden=mode!=="showcase"||preview;
+  $("btnEndPreview").hidden=!preview;
+  $("gBack").hidden=!publicData;
+  $("inName").value=S.name;$("inClass").value=S.cls;$("pubRepo").value=cfg.pubRepo;$("pubPath").value=cfg.pubPath;
+  $("storeInfo").textContent=mode==="sync"?`Private repo ${cfg.repo} · ${cfg.path}, ${cfg.codexPath}`:mode==="local"?"This device only. Unlock with an access key to sync across devices.":"";
+  $("footNote").textContent=isPublic()?"Ranks are earned by proof: certifications passed, projects shipped, rounds cleared.":"Ten minutes a day on the tracker. The rest goes to the work.";
+  if(mode==="local")setSync("This device only");
+  if(mode==="showcase")setSync(preview?"Preview of public view":"Public view");
+}
+function renderAll(){renderMode();if(mode==="locked")return;renderStatus();renderLog();renderHeat();renderTrees();renderBosses();renderJournal()}
+
+/* ---------- events ---------- */
+document.addEventListener("toggle",e=>{const d=e.target;if(d.matches&&d.matches("details.tree")){d.open?openTrees.add(d.dataset.tree):openTrees.delete(d.dataset.tree)}},true);
+document.addEventListener("click",e=>{
+  const t=e.target;
+  const q=t.closest("[data-q]");
+  if(q){const Q=QUESTS.find(x=>x.id===q.dataset.q),before=Math.floor(totalXP()/LEVEL_XP);S.log.push({id:uid(),t:today(),q:Q.id,xp:Q.xp});commit();renderStatus();renderLog();renderHeat();
+    const after=Math.floor(totalXP()/LEVEL_XP);toast(after>before?"Level up: Lv "+(after+1):"+"+Q.xp+" XP");return}
+  const u=t.closest("[data-undo]");if(u){S.log=S.log.filter(l=>l.id!==u.dataset.undo);commit();renderStatus();renderLog();renderHeat();return}
+  const p=t.closest("[data-pin]");if(p){const id=p.dataset.pin;if(S.active.includes(id))S.active=S.active.filter(a=>a!==id);else{if(S.active.length>=3){toast("Three active trees at most. Unpin one first.");return}S.active.push(id);openTrees.add(id)}commit();renderTrees();return}
+  const nb=t.closest("[data-note]");if(nb){const id=nb.dataset.note;openNotes.has(id)?openNotes.delete(id):openNotes.add(id);renderTrees();const ta=$("nn-"+id);if(ta)ta.focus();return}
+  const br=t.closest("[data-brief]");if(br){const[tid,idx]=br.dataset.brief.split(/-(?=\d+$)/);const tr=TREES.find(x=>x.id===tid),n=tr.nodes[+idx];
+    const txt=`Brief me: "${n[1]}" (${tr.name}, ${n[0]}-rank). What it is, why it matters, steps, done when, time, resources, interview line.`;
+    try{navigator.clipboard.writeText(txt).then(()=>toast("Copied. Paste it to Claude."),()=>toast(txt))}catch(err){toast(txt)}return}
+  const b=t.closest("[data-boss]");if(b){const s=S.bosses[b.dataset.boss];s.done=!s.done;commit();renderStatus();renderBosses();if(s.done)toast("Boss cleared: +500 XP");return}
+  const jd=t.closest("[data-jdel]");if(jd){if(jd.dataset.arm!=="1"){jd.dataset.arm="1";jd.textContent="Delete?";setTimeout(()=>{if(jd.isConnected){jd.dataset.arm="";jd.textContent="×"}},3000);return}
+    S.journal=S.journal.filter(j=>j.id!==jd.dataset.jdel);commit();renderJournal();return}
+});
+document.addEventListener("change",e=>{
+  const n=e.target.closest("[data-node]");if(n){const before=Math.floor(totalXP()/LEVEL_XP);n.checked?S.done[n.dataset.node]=true:delete S.done[n.dataset.node];commit();renderStatus();renderTrees();
+    const after=Math.floor(totalXP()/LEVEL_XP);if(after>before)toast("Level up: Lv "+(after+1));return}
+  const bd=e.target.closest("[data-bdate]");if(bd){S.bosses[bd.dataset.bdate].date=bd.value;commit();renderBosses()}
+  const bn=e.target.closest("[data-bname]");if(bn){S.bosses[bn.dataset.bname].name=bn.value.trim()||BOSSES.find(x=>x.id===bn.dataset.bname).n;commit()}
+});
+document.addEventListener("input",e=>{const nn=e.target.closest("[data-notefor]");if(nn){const id=nn.dataset.notefor;nn.value.trim()?S.notes[id]=nn.value:delete S.notes[id];commit()}});
+$("jForm").addEventListener("submit",e=>{e.preventDefault();const text=$("jText").value.trim();if(!text){$("jText").focus();return}S.journal.push({id:uid(),t:today(),tree:$("jTree").value,text});$("jText").value="";commit();renderJournal();toast("Note added")});
+$("jMore").addEventListener("click",()=>{showAllNotes=!showAllNotes;renderJournal()});
+$("inName").addEventListener("input",e=>{S.name=e.target.value;commit();renderStatus()});
+$("inClass").addEventListener("input",e=>{S.cls=e.target.value;commit();renderStatus()});
+$("pubRepo").addEventListener("change",e=>{cfg.pubRepo=e.target.value.trim();saveCfg()});
+$("pubPath").addEventListener("change",e=>{cfg.pubPath=e.target.value.trim();saveCfg()});
+$("cxEdit").addEventListener("click",()=>{$("codexEditor").value=codexText;$("cxEditWrap").hidden=false;$("codexEditor").focus()});
+$("cxCancel").addEventListener("click",()=>{$("cxEditWrap").hidden=true});
+$("cxSave").addEventListener("click",async()=>{await saveCodex($("codexEditor").value);$("cxEditWrap").hidden=true;toast("Codex saved")});
+
+$("btnExport").addEventListener("click",()=>{const txt=JSON.stringify(S);$("ioBox").value=txt;try{navigator.clipboard.writeText(txt).then(()=>toast("Save copied"),()=>{$("ioBox").select();toast("Select the text and copy it")})}catch(err){$("ioBox").select()}});
+$("btnImport").addEventListener("click",()=>{const o=parse($("ioBox").value);if(!o||typeof o!=="object"||!o.done){toast("That isn't a valid save. Paste the full text from Show and copy save.");return}S=normalize(o);commit();renderAll();toast("Save imported")});
+let resetArm=false;
+$("btnReset").addEventListener("click",e=>{if(!resetArm){resetArm=true;e.target.textContent="Press again to reset";setTimeout(()=>{resetArm=false;e.target.textContent="Reset progress"},3000);return}
+  resetArm=false;e.target.textContent="Reset progress";S=defaults();commit();renderAll();toast("Progress reset")});
+$("btnPublish").addEventListener("click",async()=>{
+  if(mode!=="sync"){toast("Unlock with an access key first.");return}
+  setSync("Publishing public view…");
+  try{let sha=null;try{const f=await getFile(cfg.pubRepo,cfg.pubPath);sha=f?f.sha:null}catch(e){}
+    await putText(cfg.pubRepo,cfg.pubPath,JSON.stringify(toPublic()),sha,"hunter: update public view");setSync("Public view published "+hhmm());toast("Published. Live after the site redeploys.")}
+  catch(e){setSync("Couldn't publish. "+e.message+" Add the portfolio repo to the access key.",true)}
+});
+$("btnPreview").addEventListener("click",()=>{preview=true;renderAll();window.scrollTo(0,0)});
+$("btnEndPreview").addEventListener("click",()=>{preview=false;renderAll()});
+$("btnOwner").addEventListener("click",()=>{mode="locked";renderAll();$("gToken").focus()});
+$("gBack").addEventListener("click",()=>{if(publicData){S=normalize(publicData);mode="showcase";renderAll()}});
+$("gLocal").addEventListener("click",()=>{cfg.local=true;cfg.token="";saveCfg();S=normalize(parse(store.get(DATA_KEY))||parse(store.get(OLD_KEY))||{});mode="local";renderAll();loadCodex()});
+$("gateForm").addEventListener("submit",async e=>{
+  e.preventDefault();const repo=$("gRepo").value.trim(),token=$("gToken").value.trim();$("gErr").textContent="";
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)){$("gErr").textContent="Enter the repo as owner/name, for example perugoal2/hunter-data.";return}
+  if(!token){$("gErr").textContent="Paste your access key.";$("gToken").focus();return}
+  $("gGo").textContent="Checking…";
+  try{const prev=cfg.token;cfg.token=token;const r=await gh("GET","/repos/"+repo);if(!r.ok){cfg.token=prev;throw new Error(errMsg(r.status))}
+    const j=await r.json();cfg.repo=repo;cfg.local=false;saveCfg();$("gToken").value="";
+    S=normalize(parse(store.get(DATA_KEY))||parse(store.get(OLD_KEY))||{});mode="sync";preview=false;renderAll();
+    if(!j.private)toast("Warning: this repo is public. Make it private in its GitHub settings.");
+    await pull();
+  }catch(err){$("gErr").textContent=err.message}finally{$("gGo").textContent="Unlock"}
+});
+$("btnLock").addEventListener("click",async()=>{
+  if(mode==="sync"&&store.get(PEND_KEY))await push();
+  if(mode==="sync"&&store.get(PEND_KEY)){toast("Not saved to GitHub yet. Copy a backup in Settings, or try again.");return}
+  cfg.token="";cfg.local=false;saveCfg();store.del(DATA_KEY);store.del(OLD_KEY);store.del(CODEX_KEY);store.del(PEND_KEY);
+  S=defaults();codexText="";openNotes.clear();preview=false;
+  if(publicData){S=normalize(publicData);mode="showcase"}else mode="locked";
+  renderAll();toast("Locked. Nothing is left on this device.");
+});
+window.addEventListener("beforeunload",e=>{if(mode==="sync"&&store.get(PEND_KEY)){push();e.preventDefault();e.returnValue=""}});
+
+/* ---------- start ---------- */
+async function start(){
+  renderQuests();
+  try{const r=await fetch("public.json",{cache:"no-store"});if(r.ok){const p=await r.json();if(p&&p.done)publicData=p}}catch(e){}
+  if(cfg.token){mode="sync";renderAll();pull();return}
+  if(cfg.local){mode="local";renderAll();loadCodex();return}
+  if(publicData){S=normalize(publicData);mode="showcase";renderAll();return}
+  mode="locked";renderAll();
+}
+start();
+})();
+</script>
+
+</body>
+</html>
